@@ -22,18 +22,12 @@
 		710E21792A80512200B3117C /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710E21752A80512200B3117C /* LoginView.swift */; };
 		710E217A2A80512200B3117C /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710E21752A80512200B3117C /* LoginView.swift */; };
 		710E217B2A80512200B3117C /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710E21752A80512200B3117C /* LoginView.swift */; };
-		710E217D2A8051C900B3117C /* MessagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710E217C2A8051C900B3117C /* MessagingView.swift */; };
-		710E217E2A8051C900B3117C /* MessagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710E217C2A8051C900B3117C /* MessagingView.swift */; };
-		710E217F2A8051C900B3117C /* MessagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710E217C2A8051C900B3117C /* MessagingView.swift */; };
-		710E21812A8051DA00B3117C /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710E21802A8051DA00B3117C /* UserInfoView.swift */; };
-		710E21822A8051DA00B3117C /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710E21802A8051DA00B3117C /* UserInfoView.swift */; };
-		710E21832A8051DA00B3117C /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710E21802A8051DA00B3117C /* UserInfoView.swift */; };
-		710E21892A8051FD00B3117C /* NetworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710E21882A8051FD00B3117C /* NetworkView.swift */; };
-		710E218A2A8051FD00B3117C /* NetworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710E21882A8051FD00B3117C /* NetworkView.swift */; };
-		710E218B2A8051FD00B3117C /* NetworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710E21882A8051FD00B3117C /* NetworkView.swift */; };
 		710E218D2A80531D00B3117C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710E218C2A80531D00B3117C /* AppDelegate.swift */; };
 		710E218E2A80531D00B3117C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710E218C2A80531D00B3117C /* AppDelegate.swift */; };
 		710E218F2A80531D00B3117C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710E218C2A80531D00B3117C /* AppDelegate.swift */; };
+		71B48C5A2A9E8F0100749B6D /* MessagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B48C552A9E8F0100749B6D /* MessagingView.swift */; };
+		71B48C5B2A9E8F0100749B6D /* NetworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B48C572A9E8F0100749B6D /* NetworkView.swift */; };
+		71B48C5C2A9E8F0100749B6D /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B48C592A9E8F0100749B6D /* UserInfoView.swift */; };
 		71DC4D432A54878100244C9B /* slushApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71DC4D422A54878100244C9B /* slushApp.swift */; };
 		71DC4D472A54878200244C9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71DC4D462A54878200244C9B /* Assets.xcassets */; };
 		71DC4D4A2A54878200244C9B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71DC4D492A54878200244C9B /* Preview Assets.xcassets */; };
@@ -63,10 +57,10 @@
 		710E21582A7EC2CB00B3117C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		710E21732A80512200B3117C /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		710E21752A80512200B3117C /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		710E217C2A8051C900B3117C /* MessagingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingView.swift; sourceTree = "<group>"; };
-		710E21802A8051DA00B3117C /* UserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoView.swift; sourceTree = "<group>"; };
-		710E21882A8051FD00B3117C /* NetworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkView.swift; sourceTree = "<group>"; };
 		710E218C2A80531D00B3117C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		71B48C552A9E8F0100749B6D /* MessagingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagingView.swift; sourceTree = "<group>"; };
+		71B48C572A9E8F0100749B6D /* NetworkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkView.swift; sourceTree = "<group>"; };
+		71B48C592A9E8F0100749B6D /* UserInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfoView.swift; sourceTree = "<group>"; };
 		71DC4D3F2A54878100244C9B /* slush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = slush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71DC4D422A54878100244C9B /* slushApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = slushApp.swift; sourceTree = "<group>"; };
 		71DC4D462A54878200244C9B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -122,9 +116,9 @@
 			isa = PBXGroup;
 			children = (
 				710E21732A80512200B3117C /* HomeView.swift */,
-				710E217C2A8051C900B3117C /* MessagingView.swift */,
-				710E21802A8051DA00B3117C /* UserInfoView.swift */,
-				710E21882A8051FD00B3117C /* NetworkView.swift */,
+				71B48C542A9E8F0100749B6D /* Messaging */,
+				71B48C562A9E8F0100749B6D /* Network */,
+				71B48C582A9E8F0100749B6D /* UserInfo */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -135,6 +129,30 @@
 				710E21752A80512200B3117C /* LoginView.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		71B48C542A9E8F0100749B6D /* Messaging */ = {
+			isa = PBXGroup;
+			children = (
+				71B48C552A9E8F0100749B6D /* MessagingView.swift */,
+			);
+			path = Messaging;
+			sourceTree = "<group>";
+		};
+		71B48C562A9E8F0100749B6D /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				71B48C572A9E8F0100749B6D /* NetworkView.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		71B48C582A9E8F0100749B6D /* UserInfo */ = {
+			isa = PBXGroup;
+			children = (
+				71B48C592A9E8F0100749B6D /* UserInfoView.swift */,
+			);
+			path = UserInfo;
 			sourceTree = "<group>";
 		};
 		71DC4D362A54878100244C9B = {
@@ -160,9 +178,9 @@
 		71DC4D412A54878100244C9B /* slush */ = {
 			isa = PBXGroup;
 			children = (
-				710E21712A80512200B3117C /* Views */,
 				71DC4D422A54878100244C9B /* slushApp.swift */,
 				710E218C2A80531D00B3117C /* AppDelegate.swift */,
+				710E21712A80512200B3117C /* Views */,
 				710E21582A7EC2CB00B3117C /* GoogleService-Info.plist */,
 				71DC4D462A54878200244C9B /* Assets.xcassets */,
 				71DC4D482A54878200244C9B /* Preview Content */,
@@ -340,12 +358,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				710E21792A80512200B3117C /* LoginView.swift in Sources */,
+				71B48C5C2A9E8F0100749B6D /* UserInfoView.swift in Sources */,
+				71B48C5A2A9E8F0100749B6D /* MessagingView.swift in Sources */,
 				71DC4D432A54878100244C9B /* slushApp.swift in Sources */,
+				71B48C5B2A9E8F0100749B6D /* NetworkView.swift in Sources */,
 				710E21762A80512200B3117C /* HomeView.swift in Sources */,
-				710E21892A8051FD00B3117C /* NetworkView.swift in Sources */,
 				710E218D2A80531D00B3117C /* AppDelegate.swift in Sources */,
-				710E217D2A8051C900B3117C /* MessagingView.swift in Sources */,
-				710E21812A8051DA00B3117C /* UserInfoView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,10 +374,7 @@
 				710E217A2A80512200B3117C /* LoginView.swift in Sources */,
 				71DC4D542A54878200244C9B /* slushTests.swift in Sources */,
 				710E21772A80512200B3117C /* HomeView.swift in Sources */,
-				710E218A2A8051FD00B3117C /* NetworkView.swift in Sources */,
 				710E218E2A80531D00B3117C /* AppDelegate.swift in Sources */,
-				710E217E2A8051C900B3117C /* MessagingView.swift in Sources */,
-				710E21822A8051DA00B3117C /* UserInfoView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,10 +384,7 @@
 			files = (
 				710E218F2A80531D00B3117C /* AppDelegate.swift in Sources */,
 				710E21782A80512200B3117C /* HomeView.swift in Sources */,
-				710E217F2A8051C900B3117C /* MessagingView.swift in Sources */,
-				710E218B2A8051FD00B3117C /* NetworkView.swift in Sources */,
 				71DC4D602A54878200244C9B /* slushUITestsLaunchTests.swift in Sources */,
-				710E21832A8051DA00B3117C /* UserInfoView.swift in Sources */,
 				710E217B2A80512200B3117C /* LoginView.swift in Sources */,
 				71DC4D5E2A54878200244C9B /* slushUITests.swift in Sources */,
 			);
