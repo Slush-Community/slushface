@@ -28,3 +28,22 @@ class FirestoreService {
     // Additional methods like updateUser, deleteUser, etc.
 }
 
+
+// MARK: - Slush Operations
+extension FirestoreService {
+
+    func createSlush(slush: Slush, completion: @escaping (Result<Slush, Error>) -> Void) {
+        // Logic to add the slush to Firestore
+    }
+
+    func inviteToSlush(slushID: String, user: User, completion: @escaping (Result<Bool, Error>) -> Void) {
+        // Logic to invite a user to a specific slush
+    }
+
+    func spendSlush(slushID: String, completion: @escaping (Result<Bool, Error>) -> Void) {
+        // Logic to mark a slush as spent and divide the price
+    }
+
+    // ... Other necessary methods ...
+}
+
