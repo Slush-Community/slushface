@@ -3,21 +3,19 @@
 //  slush
 //
 //  Created by Kareem Benaissa on 8/5/23.
-//
+// View: Represents the UI. In SwiftUI, views are lightweight and often regenerated, so they should be free of app logic.
 import SwiftUI
-import Firebase
 
 struct HomeView: View {
-    @State private var selectedPage = 1 // Start with the middle page
+    @ObservedObject var userViewModel: UserViewModel  // Inject the view model
 
     var body: some View {
-        UserInfoView()
-    }
-}
+        VStack {
+            Text("Welcome, \(userViewModel.userData?.username ?? "User")!")
+                .font(.largeTitle)
+                .padding()
 
-
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
+            // Display more user data or other UI components here
+        }
     }
 }

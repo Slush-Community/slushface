@@ -8,18 +8,16 @@
 import SwiftUI
 
 @main
-struct slushApp: App {
-    // register app delegate for Firebase setup
+struct SlushApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
-    @State private var isAuthenticated: Bool = false
+    @StateObject private var userViewModel = UserViewModel() // Global ViewModel instance
 
     var body: some Scene {
         WindowGroup {
-            if isAuthenticated {
-                HomeView()
+            if userViewModel.isAuthenticated {
+                HomeView(userViewModel: userViewModel)
             } else {
-                LoginView(isAuthenticated: $isAuthenticated)
+                LoginView()
             }
         }
     }

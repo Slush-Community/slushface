@@ -6,11 +6,10 @@
 //
 // TODO: Add email verification
 import SwiftUI
-import Firebase
 
 struct LoginView: View {
-    @Binding var isAuthenticated: Bool
-    
+    @ObservedObject var userViewModel = UserViewModel()  // Initialize your view model
+
     @State private var username: String = ""
     @State private var password: String = ""
     
@@ -19,18 +18,13 @@ struct LoginView: View {
             TextField("Username", text: $username)
                 .padding()
                 .autocapitalization(.none)
+
             SecureField("Password", text: $password)
                 .padding()
                 .autocapitalization(.none)
+
             Button(action: {
-                Auth.auth().signIn(withEmail: username, password: password) { authResult, error in
-                    if let error = error {
-                        print("Error occurred: \(error.localizedDescription)")
-                    } else {
-                        print("User signed in successfully.")
-                        self.isAuthenticated = true
-                    }
-                }
+                userViewModel.login(username: username, password: password)
             }) {
                 Text("Log In")
                     .padding()
@@ -40,27 +34,22 @@ struct LoginView: View {
             }
             .padding()
             
-            
             // Sign Up button
-                Button(action: {
-                    Auth.auth().createUser(withEmail: username, password: password) { authResult, error in
-                        if let error = error {
-                            print("Error occurred: \(error.localizedDescription)")
-                        } else {
-                            print("User signed up successfully.")
-                        }
-                    }
-                }) {
-                    Text("Sign Up")
-                        .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                .padding()
+            Button(action: {
+                // SignUp action
+            }) {
+                Text("Sign Up")
+                    .padding()
+                    .background(Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+            .padding()
         }
     }
 }
+
+
 
 //struct LoginView_Previews: PreviewProvider {
 //    static var previews: some View {
