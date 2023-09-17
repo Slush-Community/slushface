@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
-    @ObservedObject var userViewModel = UserViewModel()  // Initialize your view model
+    @ObservedObject var userViewModel: UserViewModel
 
     @State private var username: String = ""
     @State private var password: String = ""
@@ -36,7 +36,7 @@ struct LoginView: View {
             
             // Sign Up button
             Button(action: {
-                // SignUp action
+                userViewModel.signUp(username: username, password: password)
             }) {
                 Text("Sign Up")
                     .padding()

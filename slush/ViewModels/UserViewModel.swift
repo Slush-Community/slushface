@@ -32,6 +32,27 @@ class UserViewModel: ObservableObject {
             }
         }
     }
+    
+    func signUp(username: String, password: String) {
+        authService.signUp(email: username, password: password) { [weak self] result in
+            switch result {
+            case .success(let authResult):
+                print("User signed up successfully.")
+                let uid = authResult.user.uid
+                self?.firestoreService.setUserData(uid: uid, username: username) { firestoreResult in
+                    switch firestoreResult {
+                    case .success:
+                        print("User data added to Firestore successfully.")
+                    case .failure(let error):
+                        print("Failed to add user data to Firestore: \(error.localizedDescription)")
+                    }
+                }
+            case .failure(let error):
+                print("Error occurred: \(error.localizedDescription)")
+            }
+        }
+    }
+
 
     // Additional methods for sign up, sign out, etc.
 }

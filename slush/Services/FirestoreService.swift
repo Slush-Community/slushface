@@ -14,6 +14,16 @@ class FirestoreService {
             }
         }
     }
+    
+    func setUserData(uid: String, username: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        db.collection("users").document(uid).setData(["username": username]) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
 
     // Additional methods like updateUser, deleteUser, etc.
 }

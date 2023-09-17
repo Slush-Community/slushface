@@ -17,7 +17,7 @@ struct SlushApp: App {
             if userViewModel.isAuthenticated {
                 HomeView(userViewModel: userViewModel)
             } else {
-                LoginView()
+                LoginView(userViewModel: userViewModel)
             }
         }
     }
