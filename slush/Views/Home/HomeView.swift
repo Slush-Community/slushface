@@ -23,9 +23,35 @@ struct HomeView: View {
                 .tag(0)
                 
                 ScrollView {
-                    // Your content
-                    Text("Slush Friends Activity")
+                    VStack(spacing: 20) {
+                        // Profile picture
+                        Image(systemName: "dollarsign.circle")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                            .clipShape(Circle())  // Makes the image circular
+                            .overlay(
+                                Circle().stroke(Color.white, lineWidth: 4))  // Add a border to the image
+                            .shadow(radius: 10)  // Adds a subtle shadow
+                        
+                        // Username
+                        Text(userViewModel.userData?.username ?? "Default Username")
+                            .font(.title)
+                            .fontWeight(.medium)
+                        
+                        // Friends' activity
+                        Text("Slush Friends Activity")
+                            .font(.headline)
+                            .padding(.bottom, 10)
+                        
+                        // Here, you can add more views/components to display the actual friends' activity.
+                        // Example:
+//                        ForEach(userViewModel.friendsActivity, id: \.self) { activity in
+//                            Text(activity)
+//                        }
+                    }
+                    .padding()
                 }
+
                 .tag(1)
 
                 MarketplaceView(userViewModel: userViewModel)

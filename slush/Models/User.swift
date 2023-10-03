@@ -6,4 +6,5 @@ struct User {
     //value
     var username: String
     // Add other fields as needed
+
 }
