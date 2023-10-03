@@ -7,61 +7,70 @@
 import SwiftUI
 
 struct HomeView: View {
-    @ObservedObject var userViewModel: UserViewModel  // Inject the view model
-    @State private var selectedPage = 1  // Start with the HomeView as default
-    @State private var showSlushCreateView = false // Control the presentation of SlushCreateView
+    @ObservedObject var userViewModel: UserViewModel
+    @State private var selectedPage = 1
+    @State private var showSlushCreateView = false
 
     var body: some View {
-        NavigationView {
-            VStack {
-                // Main TabView
-                TabView(selection: $selectedPage) {
-                    // First Page - ListView
-                    ListView(userViewModel: userViewModel)
-                        .tag(0)
-                    // Middle Page - SlushHomeView
-                    SlushHomeView(userViewModel: userViewModel)
-                        .tag(1)
-                    // Right Page - MarketplaceView
-                    MarketplaceView(userViewModel: userViewModel)
-                        .tag(2)
-                }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))  // Hides the default page dots
-                .frame(maxHeight: .infinity) // Occupy all available space
+        VStack {
+            // This is the main content of your views, which takes up most of the screen.
+            TabView(selection: $selectedPage) {
+                ListView(userViewModel: userViewModel)
+                .tag(0)
                 
-                HStack {
-                    Button(action: {
-                        selectedPage = 0
-                    }) {
-                        Image(systemName: "list.bullet")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                    }
-                    Spacer()
-                    Button(action: {
-                        showSlushCreateView.toggle()  // Toggle the showSlushCreateView state
-                    }) {
-                        Image(systemName: "dollarsign.circle")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                    }
-                    Spacer()
-                    Button(action: {
-                        selectedPage = 2
-                    }) {
-                        Image(systemName: "house")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                    }
+                ScrollView {
+                    // Add your content here, for example:
+                    Text("Slush Friends Activity")
+                    // ... other content
                 }
-                .padding()
+                .tag(1)
+
+
+                MarketplaceView(userViewModel: userViewModel)
+                .tag(2)
             }
-            .sheet(isPresented: $showSlushCreateView) {
-                SlushCreateView()  // Present SlushCreateView as a sheet
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            .frame(maxHeight: .infinity)
+
+            Divider()  // Add a line to visually separate the tab menu
+
+            // This is your fixed tab menu.
+            HStack {
+                Button(action: {
+                    selectedPage = 0
+                }) {
+                    Image(systemName: "list.bullet")
+                        .resizable()
+                        .frame(width: 21, height: 21)
+                        .foregroundColor(selectedPage == 0 ? Color.blue : Color.gray)
+                }
+                
+                Spacer().frame(width: 50)
+                
+                Button(action: {
+                    showSlushCreateView.toggle()
+                }) {
+                    Image(systemName: "dollarsign.circle")
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                }
+                
+                Spacer().frame(width: 50)
+                
+                Button(action: {
+                    selectedPage = 2
+                }) {
+                    Image(systemName: "house")
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                        .foregroundColor(selectedPage == 2 ? Color.blue : Color.gray)
+                }
             }
+            .padding()
         }
     }
 }
+
 
 
 
