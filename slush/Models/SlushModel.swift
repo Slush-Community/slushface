@@ -6,7 +6,10 @@
 //
 
 struct Slush {
+    //key
     var id: String
+    
+    //value
     var creator: User
     var product: String
     var price: Double

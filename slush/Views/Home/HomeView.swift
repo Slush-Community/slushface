@@ -8,14 +8,55 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var userViewModel: UserViewModel  // Inject the view model
+    @State private var selectedPage = 1  // Start with the middle page
 
     var body: some View {
         VStack {
-            Text("Welcome, \(userViewModel.userData?.username ?? "User")!")
-                .font(.largeTitle)
-                .padding()
-
-            // Display more user data or other UI components here
+            // Main TabView
+            TabView(selection: $selectedPage) {
+                // Left Page - ListView
+                ListView(userViewModel: userViewModel)
+                    .tag(0)
+                // Middle Page - SlushHomeView
+                SlushHomeView(userViewModel: userViewModel)
+                    .tag(1)
+                // Right Page - MarketplaceView
+                MarketplaceView(userViewModel: userViewModel)
+                    .tag(2)
+            }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))  // Hides the default page dots
+            .frame(maxHeight: .infinity) // Occupy all available space
+            
+            HStack {
+                Button(action: {
+                    selectedPage = 0
+                }) {
+                    Image(systemName: "list.bullet") // List icon
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                }
+                Spacer()
+                Button(action: {
+                    selectedPage = 1
+                }) {
+                    Image(systemName: "dollarsign.circle") // Dollar sign icon
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                }
+                Spacer()
+                Button(action: {
+                    selectedPage = 2
+                }) {
+                    Image(systemName: "house") // House icon
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                }
+            }
+            .padding()
         }
     }
 }
+
+
+
+
