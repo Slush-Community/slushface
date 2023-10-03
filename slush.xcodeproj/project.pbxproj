@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		265890A72ACCC5E6007C1E64 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265890A62ACCC5E6007C1E64 /* SettingsView.swift */; };
 		710E21592A7EC2CB00B3117C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 710E21582A7EC2CB00B3117C /* GoogleService-Info.plist */; };
 		710E215A2A7EC2CB00B3117C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 710E21582A7EC2CB00B3117C /* GoogleService-Info.plist */; };
 		710E215B2A7EC2CB00B3117C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 710E21582A7EC2CB00B3117C /* GoogleService-Info.plist */; };
@@ -64,6 +65,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		265890A62ACCC5E6007C1E64 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		710E21582A7EC2CB00B3117C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		710E21732A80512200B3117C /* HomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		710E21752A80512200B3117C /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -123,9 +125,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		265890A52ACCC5C0007C1E64 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				265890A62ACCC5E6007C1E64 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		710E21712A80512200B3117C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				265890A52ACCC5C0007C1E64 /* Settings */,
 				712E7A702AB6DF1F002B04DA /* SlushView */,
 				710E21722A80512200B3117C /* Home */,
 				710E21742A80512200B3117C /* Login */,
@@ -430,6 +441,7 @@
 				710E21792A80512200B3117C /* LoginView.swift in Sources */,
 				712E7A7E2ACBCF7D002B04DA /* MarketplaceView.swift in Sources */,
 				712E7A722AB6E008002B04DA /* SlushCreateView.swift in Sources */,
+				265890A72ACCC5E6007C1E64 /* SettingsView.swift in Sources */,
 				712E7A762AB6E026002B04DA /* SlushSpendView.swift in Sources */,
 				71B48C5A2A9E8F0100749B6D /* MessagingView.swift in Sources */,
 				712E7A6A2AB6C9A2002B04DA /* UserViewModel.swift in Sources */,

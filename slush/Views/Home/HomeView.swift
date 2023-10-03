@@ -4,7 +4,8 @@
 //
 //  Created by Kareem Benaissa on 8/5/23.
 // View: Represents the UI. In SwiftUI, views are lightweight and often regenerated, so they should be free of app logic.]
-
+// TODO: Fix bug where you can't select the list page when the page loads
+// TODO: Make settings wheel lead to SettingsView onclick
 
 import SwiftUI
 
@@ -15,43 +16,55 @@ struct HomeView: View {
 
     var body: some View {
         ZStack {
-            // This is the main content of your views, which takes up most of the screen.
             
-            // TODO: Fix List bug to allow to click on the Icon after inital load
+            // TabView
             TabView(selection: $selectedPage) {
                 ListView(userViewModel: userViewModel)
                 .tag(0)
                 
-                ScrollView {
-                    VStack(spacing: 20) {
-                        // Profile picture
-                        Image(systemName: "dollarsign.circle")
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                            .clipShape(Circle())  // Makes the image circular
-                            .overlay(
-                                Circle().stroke(Color.white, lineWidth: 4))  // Add a border to the image
-                            .shadow(radius: 10)  // Adds a subtle shadow
-                        
-                        // Username
-                        Text(userViewModel.userData?.username ?? "Default Username")
-                            .font(.title)
-                            .fontWeight(.medium)
-                        
-                        // Friends' activity
-                        Text("Slush Friends Activity")
-                            .font(.headline)
-                            .padding(.bottom, 10)
-                        
-                        // Here, you can add more views/components to display the actual friends' activity.
-                        // Example:
-//                        ForEach(userViewModel.friendsActivity, id: \.self) { activity in
-//                            Text(activity)
-//                        }
-                    }
-                    .padding()
-                }
+                VStack {
+                    // Profile section
+                    HStack(spacing: 15) {
+                        ZStack {
+                            Image(systemName: "dollarsign.circle")
+                                .resizable()
+                                .frame(width: 120, height: 120)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.white, lineWidth: 4))
+                                .shadow(radius: 10)
 
+                            NavigationLink(destination: SettingsView()) {
+                                Image(systemName: "gearshape")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .background(Color.white)
+                                    .clipShape(Circle())
+                                    .padding(5)
+                                    .background(Color.clear)
+                            }
+                            .background(Color.clear.frame(width: 50, height: 50))
+                            .offset(x: 45, y: 45)
+                            .zIndex(1)
+                        }
+                        
+                        Text(userViewModel.userData?.username ?? "Default Username")
+                            .font(.system(size: 16))
+                            .fontWeight(.medium)
+                    }
+                    .padding(.top)
+                    
+                    // Friends' activity
+                    ScrollView {
+                        VStack(spacing: 20) {
+                            Text("Slush Friends Activity")
+                                .font(.headline)
+                                .padding(.bottom, 10)
+                            
+                            // Placeholder for friends' activity
+                        }
+                        .padding()
+                    }
+                }
                 .tag(1)
 
                 MarketplaceView(userViewModel: userViewModel)
@@ -59,19 +72,13 @@ struct HomeView: View {
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             .frame(maxHeight: .infinity)
-            .onChange(of: selectedPage) { _ in
-                // Force the view to update
-                withAnimation {
-                    self.selectedPage = selectedPage
-                }
-            }
-            
+
+            // Tab menu
             VStack {
                 Spacer()  // Push the menu to the bottom
                 
                 Divider()  // Add a line to visually separate the tab menu
 
-                // This is your fixed tab menu.
                 HStack {
                     Button(action: {
                         selectedPage = 0
@@ -107,11 +114,12 @@ struct HomeView: View {
                     }
                 }
                 .padding()
-                .zIndex(1)  // This ensures the menu is above the TabView
             }
+            .zIndex(2) // Make sure the tab menu is on top
         }
     }
 }
+
 
 
 
