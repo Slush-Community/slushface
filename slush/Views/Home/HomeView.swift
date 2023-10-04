@@ -15,7 +15,7 @@ struct HomeView: View {
     @State private var showSlushCreateView = false
 
     var body: some View {
-        ZStack {
+        VStack(spacing: 0) {
             
             // TabView
             TabView(selection: $selectedPage) {
@@ -74,10 +74,25 @@ struct HomeView: View {
             .frame(maxHeight: .infinity)
 
             // Tab menu
-            VStack {
-                Spacer()  // Push the menu to the bottom
+        
+            ZStack {
+                // Custom divider
+                Path { path in
+                    let start = CGPoint(x: UIScreen.main.bounds.width / 2 - 48, y: 0)
+                    let end = CGPoint(x: UIScreen.main.bounds.width / 2 + 48, y: 0)
+                    let control1 = CGPoint(x: UIScreen.main.bounds.width / 2 - 30, y: 63)
+                    let control2 = CGPoint(x: UIScreen.main.bounds.width / 2 + 30, y: 63)
+
+                    path.move(to: CGPoint(x: 0, y: 0))
+                    path.addLine(to: start)
+                    path.addCurve(to: end, control1: control1, control2: control2)
+                    path.addLine(to: CGPoint(x: UIScreen.main.bounds.width, y: 0))
+                }
+                .stroke(Color.white, lineWidth: 1)
+                .opacity(0.7)
+                .shadow(color: Color.black.opacity(0.5), radius: 5, x: 0, y: -3)
                 
-                Divider()  // Add a line to visually separate the tab menu
+                // TODO: finish tweaking the shadow opacity to make this look good
 
                 HStack {
                     Button(action: {
@@ -85,38 +100,50 @@ struct HomeView: View {
                     }) {
                         Image(systemName: "list.bullet")
                             .resizable()
+                            .scaledToFit()
                             .frame(width: 21, height: 21)
                             .foregroundColor(selectedPage == 0 ? Color.blue : Color.gray)
                     }
-                    
-                    Spacer().frame(width: 50)
-                    
-                    Button(action: {
-                        showSlushCreateView.toggle()
-                    }) {
-                        Image(systemName: "dollarsign.circle")
-                            .resizable()
-                            .frame(width: 60, height: 60)
+                    .frame(maxWidth: .infinity)
+
+                    ZStack {
+                        Circle()
+                            .frame(width: 70, height: 70)
+                            .foregroundColor(Color.white)
+                            .shadow(radius: 5)
+
+                        Button(action: {
+                            showSlushCreateView.toggle()
+                        }) {
+                            Image(systemName: "dollarsign.circle")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 60, height: 60) // Adjust to your preference
+                        }
+                        .sheet(isPresented: $showSlushCreateView) {
+                            SlushCreateView()
+                        }
                     }
-                    .sheet(isPresented: $showSlushCreateView) {
-                        SlushCreateView()
-                    }
-                    
-                    Spacer().frame(width: 50)
-                    
+                    .offset(y: -58) // This moves the button halfway above the divider
+                    .padding(.bottom, -35)
+
                     Button(action: {
                         selectedPage = 2
                     }) {
                         Image(systemName: "house")
                             .resizable()
+                            .scaledToFit()
                             .frame(width: 24, height: 24)
                             .foregroundColor(selectedPage == 2 ? Color.blue : Color.gray)
                     }
+                    .frame(maxWidth: .infinity)
                 }
-                .padding()
             }
-            .zIndex(2) // Make sure the tab menu is on top
+            .frame(height: 80)
+            .background(Color.white)
+            .edgesIgnoringSafeArea(.bottom)
         }
+        .edgesIgnoringSafeArea(.all)
     }
 }
 
