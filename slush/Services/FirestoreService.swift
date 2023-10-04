@@ -9,7 +9,7 @@ class FirestoreService {
             if let error = error {
                 completion(.failure(error))
             } else if let document = document, let data = document.data() {
-                let user = User(id: uid, username: data["username"] as? String ?? "") // Ensure proper decoding
+                let user = User(id: uid, username: data["username"] as? String ?? "", friends: <#T##[User]#>) // Ensure proper decoding
                 completion(.success(user))
             }
         }
@@ -28,8 +28,42 @@ class FirestoreService {
     // Additional methods like updateUser, deleteUser, etc.
 }
 
+// MARK: Freind Database Operations
+extension FirestoreService {
+    
+    func establishFriendship(user1ID: String, user2ID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+            let friendshipID = "\(user1ID)_\(user2ID)"
+            let friendshipData: [String: Any] = [
+                "user1ID": user1ID,
+                "user2ID": user2ID,
+                "dateEstablished": Timestamp(date: Date()),
+                "status": "confirmed" // or "pending" based on your use-case
+            ]
+            
+            db.collection("friendships").document(friendshipID).setData(friendshipData) { error in
+                if let error = error {
+                    completion(.failure(error))
+                } else {
+                    completion(.success(()))
+                }
+            }
+        }
+    
+    func removeFriendship(user1ID: String, user2ID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let friendshipID = "\(user1ID)_\(user2ID)"
+        db.collection("friendships").document(friendshipID).delete() { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+}
 
-// MARK: - Slush Operations
+
+
+// MARK: - Slush Database Operations
 extension FirestoreService {
 
     func createSlush(slush: Slush, completion: @escaping (Result<Slush, Error>) -> Void) {

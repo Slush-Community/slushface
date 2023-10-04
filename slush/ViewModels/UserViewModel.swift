@@ -56,3 +56,45 @@ class UserViewModel: ObservableObject {
 
     // Additional methods for sign up, sign out, etc.
 }
+
+// MARK: Freinds ViewModel Operations
+extension UserViewModel {
+
+    func addFriend(friendUID: String) {
+        guard let currentUserID = userData?.id else { return }
+        
+        // You might need to decide the order of UIDs based on some criteria like alphabetical order
+        let (user1ID, user2ID) = (currentUserID < friendUID) ? (currentUserID, friendUID) : (friendUID, currentUserID)
+        
+        // use [weak self] before result if you use self in the code somewhere
+        firestoreService.establishFriendship(user1ID: user1ID, user2ID: user2ID) { result in
+            switch result {
+            case .success:
+                print("Friendship established successfully.")
+                // Optionally, re-fetch user's friends list or other data
+            case .failure(let error):
+                print("Error occurred: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func removeFriend(friendUID: String) {
+        guard let currentUserID = userData?.id else { return }
+        
+        // You might need to decide the order of UIDs based on some criteria like alphabetical order
+        let (user1ID, user2ID) = (currentUserID < friendUID) ? (currentUserID, friendUID) : (friendUID, currentUserID)
+        
+        // use [weak self] before result if you use self in the code somewhere
+        firestoreService.removeFriendship(user1ID: user1ID, user2ID: user2ID) { result in
+            switch result {
+            case .success:
+                print("Friendship removed successfully.")
+                // Optionally, re-fetch user's friends list or other data
+            case .failure(let error):
+                print("Error occurred: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    // Add a function to fetch a list of friends for the current user
+}

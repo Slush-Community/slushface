@@ -5,6 +5,9 @@ struct User {
     
     //value
     var username: String
+    var friends: [User]
     // Add other fields as needed
+    
+    
 
 }
