@@ -13,10 +13,10 @@ struct HomeView: View {
     @ObservedObject var userViewModel: UserViewModel
     @State private var selectedPage = 1
     @State private var showSlushCreateView = false
+    @State private var forceUpdate = UUID()
 
     var body: some View {
-        VStack(spacing: 0) {
-            
+        ZStack {
             // TabView
             TabView(selection: $selectedPage) {
                 ListView(userViewModel: userViewModel)
@@ -72,80 +72,85 @@ struct HomeView: View {
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             .frame(maxHeight: .infinity)
+            // .zIndex(1)
 
             // Tab menu
-        
-            ZStack {
-                // Custom divider
-                Path { path in
-                    let start = CGPoint(x: UIScreen.main.bounds.width / 2 - 48, y: 0)
-                    let end = CGPoint(x: UIScreen.main.bounds.width / 2 + 48, y: 0)
-                    let control1 = CGPoint(x: UIScreen.main.bounds.width / 2 - 30, y: 63)
-                    let control2 = CGPoint(x: UIScreen.main.bounds.width / 2 + 30, y: 63)
-
-                    path.move(to: CGPoint(x: 0, y: 0))
-                    path.addLine(to: start)
-                    path.addCurve(to: end, control1: control1, control2: control2)
-                    path.addLine(to: CGPoint(x: UIScreen.main.bounds.width, y: 0))
-                }
-                .stroke(Color.white, lineWidth: 1)
-                .opacity(0.7)
-                .shadow(color: Color.black.opacity(0.5), radius: 5, x: 0, y: -3)
+            VStack(spacing: 0) {
+                Spacer() // Push the tab menu to the bottom
                 
-                // TODO: finish tweaking the shadow opacity to make this look good
+                ZStack {
+                    // Custom divider
+                    Path { path in
+                        let start = CGPoint(x: UIScreen.main.bounds.width / 2 - 48, y: 0)
+                        let end = CGPoint(x: UIScreen.main.bounds.width / 2 + 48, y: 0)
+                        let control1 = CGPoint(x: UIScreen.main.bounds.width / 2 - 30, y: 63)
+                        let control2 = CGPoint(x: UIScreen.main.bounds.width / 2 + 30, y: 63)
 
-                HStack {
-                    Button(action: {
-                        selectedPage = 0
-                    }) {
-                        Image(systemName: "list.bullet")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 21, height: 21)
-                            .foregroundColor(selectedPage == 0 ? Color.blue : Color.gray)
+                        path.move(to: CGPoint(x: 0, y: 0))
+                        path.addLine(to: start)
+                        path.addCurve(to: end, control1: control1, control2: control2)
+                        path.addLine(to: CGPoint(x: UIScreen.main.bounds.width, y: 0))
                     }
-                    .frame(maxWidth: .infinity)
-
-                    ZStack {
-                        Circle()
-                            .frame(width: 70, height: 70)
-                            .foregroundColor(Color.white)
-                            .shadow(radius: 5)
-
+                    .stroke(Color.white, lineWidth: 1)
+                    .opacity(0.7)
+                    .shadow(color: Color.black.opacity(0.5), radius: 5, x: 0, y: -3)
+                    
+                    HStack(spacing: 0) {
                         Button(action: {
-                            showSlushCreateView.toggle()
+                            print("ListView button tapped!")
+                            forceUpdate = UUID()
+                            selectedPage = 0
                         }) {
-                            Image(systemName: "dollarsign.circle")
+                            Image(systemName: "list.bullet")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 60, height: 60) // Adjust to your preference
+                                .frame(width: 21, height: 21)
+                                .foregroundColor(selectedPage == 0 ? Color.blue : Color.gray)
                         }
-                        .sheet(isPresented: $showSlushCreateView) {
-                            SlushCreateView()
-                        }
-                    }
-                    .offset(y: -58) // This moves the button halfway above the divider
-                    .padding(.bottom, -35)
+                        .frame(maxWidth: .infinity)
 
-                    Button(action: {
-                        selectedPage = 2
-                    }) {
-                        Image(systemName: "house")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
-                            .foregroundColor(selectedPage == 2 ? Color.blue : Color.gray)
+                        ZStack {
+                            Circle()
+                                .frame(width: 70, height: 70)
+                                .foregroundColor(Color.white)
+                                .shadow(radius: 5)
+
+                            Button(action: {
+                                showSlushCreateView.toggle()
+                            }) {
+                                Image(systemName: "dollarsign.circle")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 60, height: 60)
+                            }
+                            .sheet(isPresented: $showSlushCreateView) {
+                                SlushCreateView()
+                            }
+                        }
+                        .offset(y: -58)
+                        .padding(.bottom, -35)
+
+                        Button(action: {
+                            selectedPage = 2
+                        }) {
+                            Image(systemName: "house")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                                .foregroundColor(selectedPage == 2 ? Color.blue : Color.gray)
+                        }
+                        .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity)
                 }
+                .frame(height: 80)
+                .background(Color.white)
             }
-            .frame(height: 80)
-            .background(Color.white)
             .edgesIgnoringSafeArea(.bottom)
         }
         .edgesIgnoringSafeArea(.all)
     }
 }
+
 
 
 
