@@ -5,21 +5,12 @@ import Combine
 class UserViewModel: ObservableObject {
     @Published var userData: User?
     @Published var isAuthenticated: Bool = false
+    // currently only used for searchForUser
+    @Published var searchedUser: User?
+    
     
     private var authService = AuthenticationService()
     private var firestoreService = FirestoreService()
-
-    func login(username: String, password: String) {
-        authService.signIn(email: username, password: password) { [weak self] result in
-            switch result {
-                case .success(let authResult):
-                    let uid = authResult.user.uid
-                    self?.fetchUserData(uid: uid)
-                case .failure(let error):
-                    print("Error occurred: \(error.localizedDescription)")
-            }
-        }
-    }
     
     private func fetchUserData(uid: String) {
         firestoreService.fetchUser(withUID: uid) { [weak self] result in
@@ -27,6 +18,35 @@ class UserViewModel: ObservableObject {
                 case .success(let user):
                     self?.userData = user
                     self?.isAuthenticated = true
+                case .failure(let error):
+                    print("Error occurred: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    
+    func searchForUser(username: String) {
+        firestoreService.getUserByUsername(username: username) { [weak self] result in
+            switch result {
+            case .success(let user):
+                self?.searchedUser = user
+            case .failure(let error):
+                print("Error occurred: \(error.localizedDescription)")
+                self?.searchedUser = nil
+            }
+        }
+    }
+}
+
+// MARK: Login ViewModel Operations
+extension UserViewModel {
+    
+    func login(username: String, password: String) {
+        authService.signIn(email: username, password: password) { [weak self] result in
+            switch result {
+                case .success(let authResult):
+                    let uid = authResult.user.uid
+                    self?.fetchUserData(uid: uid)
                 case .failure(let error):
                     print("Error occurred: \(error.localizedDescription)")
             }
@@ -52,8 +72,6 @@ class UserViewModel: ObservableObject {
             }
         }
     }
-
-
     // Additional methods for sign up, sign out, etc.
 }
 
