@@ -62,7 +62,7 @@ extension UserViewModel {
 
     func addFriend(friendUID: String) {
         guard let currentUserID = self.userData?.id else { return }
-        firestoreService.addFriend(userUID: currentUserID, friendUID: friendUID) { result in
+        firestoreService.addFriend(uid: currentUserID, friendUID: friendUID) { result in
             switch result {
             case .success:
                 print("Friend added successfully.")
@@ -78,7 +78,7 @@ extension UserViewModel {
 
     func removeFriend(friendUID: String) {
         guard let currentUserID = self.userData?.id else { return }
-        firestoreService.removeFriend(userUID: currentUserID, friendUID: friendUID) { result in
+        firestoreService.removeFriend(uid: currentUserID, friendUID: friendUID) { result in
             switch result {
             case .success:
                 print("Friend removed successfully.")
