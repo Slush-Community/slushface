@@ -57,44 +57,38 @@ class UserViewModel: ObservableObject {
     // Additional methods for sign up, sign out, etc.
 }
 
-// MARK: Freinds ViewModel Operations
+// MARK: Friends ViewModel Operations
 extension UserViewModel {
 
     func addFriend(friendUID: String) {
-        guard let currentUserID = userData?.id else { return }
-        
-        // You might need to decide the order of UIDs based on some criteria like alphabetical order
-        let (user1ID, user2ID) = (currentUserID < friendUID) ? (currentUserID, friendUID) : (friendUID, currentUserID)
-        
-        // use [weak self] before result if you use self in the code somewhere
-        firestoreService.establishFriendship(user1ID: user1ID, user2ID: user2ID) { result in
+        guard let currentUserID = self.userData?.id else { return }
+        firestoreService.addFriend(userUID: currentUserID, friendUID: friendUID) { result in
             switch result {
             case .success:
-                print("Friendship established successfully.")
-                // Optionally, re-fetch user's friends list or other data
-            case .failure(let error):
-                print("Error occurred: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    func removeFriend(friendUID: String) {
-        guard let currentUserID = userData?.id else { return }
-        
-        // You might need to decide the order of UIDs based on some criteria like alphabetical order
-        let (user1ID, user2ID) = (currentUserID < friendUID) ? (currentUserID, friendUID) : (friendUID, currentUserID)
-        
-        // use [weak self] before result if you use self in the code somewhere
-        firestoreService.removeFriendship(user1ID: user1ID, user2ID: user2ID) { result in
-            switch result {
-            case .success:
-                print("Friendship removed successfully.")
-                // Optionally, re-fetch user's friends list or other data
+                print("Friend added successfully.")
+                // Optionally, you can update the userData object to include the new friend's UID without having to fetch the entire user data again:
+                if self.userData?.friends.contains(friendUID) == false {
+                    self.userData?.friends.append(friendUID)
+                }
             case .failure(let error):
                 print("Error occurred: \(error.localizedDescription)")
             }
         }
     }
 
-    // Add a function to fetch a list of friends for the current user
+    func removeFriend(friendUID: String) {
+        guard let currentUserID = self.userData?.id else { return }
+        firestoreService.removeFriend(userUID: currentUserID, friendUID: friendUID) { result in
+            switch result {
+            case .success:
+                print("Friend removed successfully.")
+                // Again, optionally, you can update the userData object to remove the friend's UID without having to fetch the entire user data again:
+                if let index = self.userData?.friends.firstIndex(of: friendUID) {
+                    self.userData?.friends.remove(at: index)
+                }
+            case .failure(let error):
+                print("Error occurred: \(error.localizedDescription)")
+            }
+        }
+    }
 }

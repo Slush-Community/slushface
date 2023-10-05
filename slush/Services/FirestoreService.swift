@@ -5,15 +5,17 @@ class FirestoreService {
     private var db = Firestore.firestore()
 
     func fetchUser(withUID uid: String, completion: @escaping (Result<User, Error>) -> Void) {
-        db.collection("users").document(uid).getDocument { (document, error) in
-            if let error = error {
-                completion(.failure(error))
-            } else if let document = document, let data = document.data() {
-                let user = User(id: uid, username: data["username"] as? String ?? "", friends: <#T##[User]#>) // Ensure proper decoding
-                completion(.success(user))
+            db.collection("users").document(uid).getDocument { (document, error) in
+                if let error = error {
+                    completion(.failure(error))
+                } else if let document = document, let data = document.data() {
+                    let username = data["username"] as? String ?? ""
+                    let friends = data["friends"] as? [String] ?? []
+                    let user = User(id: uid, username: username, friends: friends)
+                    completion(.success(user))
+                }
             }
         }
-    }
     
     func setUserData(uid: String, username: String, completion: @escaping (Result<Void, Error>) -> Void) {
         db.collection("users").document(uid).setData(["username": username]) { error in
@@ -31,16 +33,13 @@ class FirestoreService {
 // MARK: Freind Database Operations
 extension FirestoreService {
     
-    func establishFriendship(user1ID: String, user2ID: String, completion: @escaping (Result<Void, Error>) -> Void) {
-            let friendshipID = "\(user1ID)_\(user2ID)"
-            let friendshipData: [String: Any] = [
-                "user1ID": user1ID,
-                "user2ID": user2ID,
-                "dateEstablished": Timestamp(date: Date()),
-                "status": "confirmed" // or "pending" based on your use-case
-            ]
+    func addFriend(uid: String, friendUID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+            let userRef = db.collection("users").document(uid)
             
-            db.collection("friendships").document(friendshipID).setData(friendshipData) { error in
+            // Add friendUID to the friends array
+            userRef.updateData([
+                "friends": FieldValue.arrayUnion([friendUID])
+            ]) { error in
                 if let error = error {
                     completion(.failure(error))
                 } else {
@@ -48,17 +47,21 @@ extension FirestoreService {
                 }
             }
         }
-    
-    func removeFriendship(user1ID: String, user2ID: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        let friendshipID = "\(user1ID)_\(user2ID)"
-        db.collection("friendships").document(friendshipID).delete() { error in
-            if let error = error {
-                completion(.failure(error))
-            } else {
-                completion(.success(()))
+
+        func removeFriend(uid: String, friendUID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+            let userRef = db.collection("users").document(uid)
+            
+            // Remove friendUID from the friends array
+            userRef.updateData([
+                "friends": FieldValue.arrayRemove([friendUID])
+            ]) { error in
+                if let error = error {
+                    completion(.failure(error))
+                } else {
+                    completion(.success(()))
+                }
             }
         }
-    }
 }
 
 
