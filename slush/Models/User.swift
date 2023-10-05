@@ -5,6 +5,8 @@ struct User {
     
     //value
     var username: String
+    // stores user friends as list of ids
+    var friends: [String]
+    
     // Add other fields as needed
-
 }

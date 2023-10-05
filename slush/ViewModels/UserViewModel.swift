@@ -56,3 +56,39 @@ class UserViewModel: ObservableObject {
 
     // Additional methods for sign up, sign out, etc.
 }
+
+// MARK: Friends ViewModel Operations
+extension UserViewModel {
+
+    func addFriend(friendUID: String) {
+        guard let currentUserID = self.userData?.id else { return }
+        firestoreService.addFriend(uid: currentUserID, friendUID: friendUID) { result in
+            switch result {
+            case .success:
+                print("Friend added successfully.")
+                // Optionally, you can update the userData object to include the new friend's UID without having to fetch the entire user data again:
+                if self.userData?.friends.contains(friendUID) == false {
+                    self.userData?.friends.append(friendUID)
+                }
+            case .failure(let error):
+                print("Error occurred: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    func removeFriend(friendUID: String) {
+        guard let currentUserID = self.userData?.id else { return }
+        firestoreService.removeFriend(uid: currentUserID, friendUID: friendUID) { result in
+            switch result {
+            case .success:
+                print("Friend removed successfully.")
+                // Again, optionally, you can update the userData object to remove the friend's UID without having to fetch the entire user data again:
+                if let index = self.userData?.friends.firstIndex(of: friendUID) {
+                    self.userData?.friends.remove(at: index)
+                }
+            case .failure(let error):
+                print("Error occurred: \(error.localizedDescription)")
+            }
+        }
+    }
+}
