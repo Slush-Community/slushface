@@ -136,8 +136,6 @@
 		710E21712A80512200B3117C /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				265890A52ACCC5C0007C1E64 /* Settings */,
-				712E7A702AB6DF1F002B04DA /* SlushView */,
 				710E21722A80512200B3117C /* Home */,
 				710E21742A80512200B3117C /* Login */,
 			);
@@ -147,6 +145,8 @@
 		710E21722A80512200B3117C /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				265890A52ACCC5C0007C1E64 /* Settings */,
+				712E7A702AB6DF1F002B04DA /* SlushView */,
 				712E7A7C2ACBCF63002B04DA /* Marketplace */,
 				712E7A792ACBCF06002B04DA /* List */,
 				710E21732A80512200B3117C /* HomeView.swift */,
