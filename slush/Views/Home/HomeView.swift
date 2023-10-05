@@ -11,140 +11,179 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var userViewModel: UserViewModel
-    @State private var selectedPage = 1
     @State private var showSlushCreateView = false
-    @State private var forceUpdate = UUID()
 
     var body: some View {
-        ZStack {
-            // TabView
-            TabView(selection: $selectedPage) {
-                ListView(userViewModel: userViewModel)
-                .tag(0)
-                
-                VStack {
-                    // Profile section
-                    HStack(spacing: 15) {
-                        ZStack {
-                            Image(systemName: "dollarsign.circle")
-                                .resizable()
-                                .frame(width: 120, height: 120)
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.white, lineWidth: 4))
-                                .shadow(radius: 10)
+        VStack(spacing: 0) {
+            // Profile section
+            HStack(spacing: 15) {
+                Spacer()
+                Image(systemName: "dollarsign.circle")
+                    .resizable()
+                    .frame(width: 150, height: 150)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.white, lineWidth: 4))
+                    .shadow(radius: 10)
+                    
 
-                            NavigationLink(destination: SettingsView()) {
-                                Image(systemName: "gearshape")
+                Text(userViewModel.userData?.username ?? "Default Username")
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+                
+                Spacer()
+            }
+            .padding(.top, 85)
+            .padding(.bottom, 30) // This will add some space between the profile and the ScrollView
+
+            
+            
+            
+            
+            
+            
+            
+            // ScrollView for Friends' activity
+            NavigationView {
+                ScrollView {
+                    VStack(spacing: 20) { // Reduced spacing between vertical stacks
+                        // Your other content here...
+
+                        HStack(spacing: 20) { // Reduced spacing between horizontal stacks
+                            NavigationLink(destination: ListView(userViewModel: userViewModel)) {
+                                Image(systemName: "")
                                     .resizable()
-                                    .frame(width: 30, height: 30)
-                                    .background(Color.white)
-                                    .clipShape(Circle())
-                                    .padding(5)
-                                    .background(Color.clear)
+                                    .foregroundColor(.white)
+                                    .scaledToFit()
+                                    .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                    .background(Color.gray)
+                                    .cornerRadius(15)
                             }
-                            .background(Color.clear.frame(width: 50, height: 50))
-                            .offset(x: 45, y: 45)
-                            .zIndex(1)
+                            .buttonStyle(PlainButtonStyle())
+
+                            NavigationLink(destination: Text("Page 2")) {
+                                Image(systemName: "")
+                                    .resizable()
+                                    .foregroundColor(.white)
+                                    .scaledToFit()
+                                    .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                    .background(Color.gray)
+                                    .cornerRadius(15)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
+
+                        HStack(spacing: 20) { // Reduced spacing between horizontal stacks
+                            NavigationLink(destination: Text("Page 3")) {
+                                Image(systemName: "")
+                                    .resizable()
+                                    .foregroundColor(.white)
+                                    .scaledToFit()
+                                    .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                    .background(Color.gray)
+                                    .cornerRadius(15)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+
+                            NavigationLink(destination: Text("Page 4")) {
+                                Image(systemName: "")
+                                    .resizable()
+                                    .foregroundColor(.white)
+                                    .scaledToFit()
+                                    .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                    .background(Color.gray)
+                                    .cornerRadius(15)
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
                         
-                        Text(userViewModel.userData?.username ?? "Default Username")
-                            .font(.system(size: 16))
-                            .fontWeight(.medium)
-                    }
-                    .padding(.top)
-                    
-                    // Friends' activity
-                    ScrollView {
-                        VStack(spacing: 20) {
-                            Text("Slush Friends Activity")
-                                .font(.headline)
-                                .padding(.bottom, 10)
-                            
-                            // Placeholder for friends' activity
-                        }
-                        .padding()
-                    }
-                }
-                .tag(1)
-
-                MarketplaceView(userViewModel: userViewModel)
-                .tag(2)
-            }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-            .frame(maxHeight: .infinity)
-            // .zIndex(1)
-
-            // Tab menu
-            VStack(spacing: 0) {
-                Spacer() // Push the tab menu to the bottom
-                
-                ZStack {
-                    // Custom divider
-                    Path { path in
-                        let start = CGPoint(x: UIScreen.main.bounds.width / 2 - 48, y: 0)
-                        let end = CGPoint(x: UIScreen.main.bounds.width / 2 + 48, y: 0)
-                        let control1 = CGPoint(x: UIScreen.main.bounds.width / 2 - 30, y: 63)
-                        let control2 = CGPoint(x: UIScreen.main.bounds.width / 2 + 30, y: 63)
-
-                        path.move(to: CGPoint(x: 0, y: 0))
-                        path.addLine(to: start)
-                        path.addCurve(to: end, control1: control1, control2: control2)
-                        path.addLine(to: CGPoint(x: UIScreen.main.bounds.width, y: 0))
-                    }
-                    .stroke(Color.white, lineWidth: 1)
-                    .opacity(0.7)
-                    .shadow(color: Color.black.opacity(0.5), radius: 5, x: 0, y: -3)
-                    
-                    HStack(spacing: 0) {
-                        Button(action: {
-                            print("ListView button tapped!")
-                            forceUpdate = UUID()
-                            selectedPage = 0
-                        }) {
-                            Image(systemName: "list.bullet")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 21, height: 21)
-                                .foregroundColor(selectedPage == 0 ? Color.blue : Color.gray)
-                        }
-                        .frame(maxWidth: .infinity)
-
-                        ZStack {
-                            Circle()
-                                .frame(width: 70, height: 70)
-                                .foregroundColor(Color.white)
-                                .shadow(radius: 5)
-
-                            Button(action: {
-                                showSlushCreateView.toggle()
-                            }) {
-                                Image(systemName: "dollarsign.circle")
+                        HStack(spacing: 20) { // Reduced spacing between horizontal stacks
+                            NavigationLink(destination: Text("Page 5")) {
+                                Image(systemName: "")
                                     .resizable()
+                                    .foregroundColor(.white)
                                     .scaledToFit()
-                                    .frame(width: 60, height: 60)
+                                    .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                    .background(Color.gray)
+                                    .cornerRadius(15)
                             }
-                            .sheet(isPresented: $showSlushCreateView) {
-                                SlushCreateView()
-                            }
-                        }
-                        .offset(y: -58)
-                        .padding(.bottom, -35)
+                            .buttonStyle(PlainButtonStyle())
 
-                        Button(action: {
-                            selectedPage = 2
-                        }) {
-                            Image(systemName: "house")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24, height: 24)
-                                .foregroundColor(selectedPage == 2 ? Color.blue : Color.gray)
+                            NavigationLink(destination: Text("Page 6")) {
+                                Image(systemName: "")
+                                    .resizable()
+                                    .foregroundColor(.white)
+                                    .scaledToFit()
+                                    .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                    .background(Color.gray)
+                                    .cornerRadius(15)
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
-                        .frame(maxWidth: .infinity)
+                        
+                        HStack(spacing: 20) { // Reduced spacing between horizontal stacks
+                            NavigationLink(destination: Text("Page 7")) {
+                                Image(systemName: "")
+                                    .resizable()
+                                    .foregroundColor(.white)
+                                    .scaledToFit()
+                                    .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                    .background(Color.gray)
+                                    .cornerRadius(15)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+
+                            NavigationLink(destination: Text("Page 8")) {
+                                Image(systemName: "")
+                                    .resizable()
+                                    .foregroundColor(.white)
+                                    .scaledToFit()
+                                    .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                    .background(Color.gray)
+                                    .cornerRadius(15)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
+                        
+                    }
+                    .padding(.horizontal, 10) // Adjusted horizontal padding for the overall ScrollView content
+                }
+            }
+
+
+
+            
+            
+            
+            
+            
+            
+            
+
+            // Tab menu at the bottom
+            ZStack {
+                ZStack {
+                    Circle()
+                        .frame(width: 85, height: 85)
+                        .foregroundColor(Color.white)
+                        .shadow(radius: 5)
+
+                    Button(action: {
+                        showSlushCreateView.toggle()
+                    }) {
+                        Image(systemName: "dollarsign.circle")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 80, height: 80)
+                    }
+                    .sheet(isPresented: $showSlushCreateView) {
+                        SlushCreateView()
                     }
                 }
-                .frame(height: 80)
-                .background(Color.white)
+                .offset(y: -45) // This moves the button halfway above the bottom
+                .padding(.bottom, -35)
             }
+            .frame(height: 80)
+            .background(Color.white)
             .edgesIgnoringSafeArea(.bottom)
         }
         .edgesIgnoringSafeArea(.all)
