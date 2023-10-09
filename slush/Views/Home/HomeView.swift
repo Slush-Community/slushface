@@ -8,44 +8,43 @@
 
 import SwiftUI
 
-
 struct HomeView: View {
     @ObservedObject var userViewModel: UserViewModel
     @State private var showSlushCreateView = false
 
     var body: some View {
-        ZStack { // Root ZStack
-            VStack(spacing: 0) {
-                // Profile section
-                HStack(spacing: 15) {
-                    Image(systemName: "dollarsign.circle")
-                        .resizable()
-                        .frame(width: 150, height: 150)
-                        .clipShape(Circle())
-                        .overlay(Circle().stroke(Color.white, lineWidth: 4))
-                        .shadow(radius: 10)
+        ZStack {
+            NavigationView { // This is the new NavigationView wrapper.
+                VStack(spacing: 0) {
+                    // Profile section
+                    HStack(spacing: 15) {
+                        Image(systemName: "dollarsign.circle")
+                            .resizable()
+                            .frame(width: 150, height: 150)
+                            .clipShape(Circle())
+                            .overlay(Circle().stroke(Color.white, lineWidth: 4))
+                            .shadow(radius: 10)
 
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text(userViewModel.userData?.username ?? "Default Username")
-                            .font(.system(size: 16))
-                            .fontWeight(.medium)
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(userViewModel.userData?.username ?? "Default Username")
+                                .font(.system(size: 16))
+                                .fontWeight(.medium)
 
-                        NavigationLink(destination: FriendsView(userViewModel: userViewModel)) {
-                            Text("View Friends")
-                                .font(.headline)
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(15)
+                            NavigationLink(destination: FriendsView(userViewModel: userViewModel)) {
+                                Text("View Friends")
+                                    .font(.headline)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(15)
+                            }
                         }
                     }
-                }
-                .padding(.top, 85)
-                .padding(.bottom, 30)
+                    .padding(.top, 45)
+                    .padding(.bottom, 40)
 
-                // ScrollView for Friends' activity
-                NavigationView {
+                    // Your ScrollView content
                     ScrollView {
                         VStack(spacing: 20) { // Reduced spacing between vertical stacks
                             // Your other content here...
@@ -150,17 +149,15 @@ struct HomeView: View {
                         .padding(.horizontal, 10) // Adjusted horizontal padding for the overall ScrollView content
                     }
                 }
-                Spacer() // Pushes content to the top
             }
-            .edgesIgnoringSafeArea(.top) // Only ignore the top safe area
-            
+
             // Tab menu at the bottom
             VStack(spacing: 0) {
                 Spacer(minLength: 0) // Let's adjust the spacer to ensure it doesn't cover the entire screen
                 ZStack {
                     Circle()
-                        .frame(width: 85, height: 85)
                         .foregroundColor(Color.white)
+                        .frame(width: 85, height: 85)
                         .shadow(radius: 5)
 
                     Button(action: {
@@ -175,21 +172,12 @@ struct HomeView: View {
                         SlushCreateView()
                     }
                 }
-                .frame(height: 80) // Explicitly set the height for the ZStack
-                .background(Color.white)
+                .frame(height: 85) // Adjust the height to match the Circle's height
                 .edgesIgnoringSafeArea(.bottom)
             }
+
         }
     }
 }
-
-
-
-
-
-
-
-
-
 
 
