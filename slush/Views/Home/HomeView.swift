@@ -13,9 +13,9 @@ struct HomeView: View {
 
     var body: some View {
         ZStack {
-            NavigationView { // This is the new NavigationView wrapper.
+            // MARK: Profile/View Friends
+            NavigationView {
                 VStack(spacing: 0) {
-                    // Profile section
                     HStack(spacing: 15) {
                         Image(systemName: "dollarsign.circle")
                             .resizable()
@@ -43,18 +43,16 @@ struct HomeView: View {
                     .padding(.top, 45)
                     .padding(.bottom, 40)
 
-                    // Your ScrollView content
+            // MARK: Widgets
                     ScrollView {
-                        VStack(spacing: 20) { // Reduced spacing between vertical stacks
-                            // Your other content here...
-
-                            HStack(spacing: 20) { // Reduced spacing between horizontal stacks
+                        VStack(spacing: 20) {
+                            HStack(spacing: 20) {
                                 NavigationLink(destination: ListView(userViewModel: userViewModel)) {
                                     Image(systemName: "")
                                         .resizable()
                                         .foregroundColor(.white)
                                         .scaledToFit()
-                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45)
                                         .background(Color.gray)
                                         .cornerRadius(15)
                                 }
@@ -65,20 +63,20 @@ struct HomeView: View {
                                         .resizable()
                                         .foregroundColor(.white)
                                         .scaledToFit()
-                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45)
                                         .background(Color.gray)
                                         .cornerRadius(15)
                                 }
                                 .buttonStyle(PlainButtonStyle())
                             }
 
-                            HStack(spacing: 20) { // Reduced spacing between horizontal stacks
+                            HStack(spacing: 20) {
                                 NavigationLink(destination: Text("Page 3")) {
                                     Image(systemName: "")
                                         .resizable()
                                         .foregroundColor(.white)
                                         .scaledToFit()
-                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45)
                                         .background(Color.gray)
                                         .cornerRadius(15)
                                 }
@@ -89,20 +87,20 @@ struct HomeView: View {
                                         .resizable()
                                         .foregroundColor(.white)
                                         .scaledToFit()
-                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45)
                                         .background(Color.gray)
                                         .cornerRadius(15)
                                 }
                                 .buttonStyle(PlainButtonStyle())
                             }
                             
-                            HStack(spacing: 20) { // Reduced spacing between horizontal stacks
+                            HStack(spacing: 20) {
                                 NavigationLink(destination: Text("Page 5")) {
                                     Image(systemName: "")
                                         .resizable()
                                         .foregroundColor(.white)
                                         .scaledToFit()
-                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45)
                                         .background(Color.gray)
                                         .cornerRadius(15)
                                 }
@@ -113,20 +111,20 @@ struct HomeView: View {
                                         .resizable()
                                         .foregroundColor(.white)
                                         .scaledToFit()
-                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45)
                                         .background(Color.gray)
                                         .cornerRadius(15)
                                 }
                                 .buttonStyle(PlainButtonStyle())
                             }
                             
-                            HStack(spacing: 20) { // Reduced spacing between horizontal stacks
+                            HStack(spacing: 20) {
                                 NavigationLink(destination: Text("Page 7")) {
                                     Image(systemName: "")
                                         .resizable()
                                         .foregroundColor(.white)
                                         .scaledToFit()
-                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45)
                                         .background(Color.gray)
                                         .cornerRadius(15)
                                 }
@@ -137,7 +135,7 @@ struct HomeView: View {
                                         .resizable()
                                         .foregroundColor(.white)
                                         .scaledToFit()
-                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45) // Increased square size to 45% of screen width
+                                        .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.45)
                                         .background(Color.gray)
                                         .cornerRadius(15)
                                 }
@@ -145,14 +143,14 @@ struct HomeView: View {
                             }
                             
                         }
-                        .padding(.horizontal, 10) // Adjusted horizontal padding for the overall ScrollView content
+                        .padding(.horizontal, 10)
                     }
                 }
             }
 
-            // Tab menu at the bottom
+            // MARK: Slush Button
             VStack(spacing: 0) {
-                Spacer(minLength: 0) // Let's adjust the spacer to ensure it doesn't cover the entire screen
+                Spacer(minLength: 0)
                 ZStack {
                     Circle()
                         .foregroundColor(Color.white)
@@ -171,7 +169,7 @@ struct HomeView: View {
                         SlushCreateView()
                     }
                 }
-                .frame(height: 85) // Adjust the height to match the Circle's height
+                .frame(height: 85)
                 .edgesIgnoringSafeArea(.bottom)
             }
 
