@@ -1,4 +1,5 @@
 import Firebase
+import SwiftUI
 
 class AuthenticationService {
     func signIn(email: String, password: String, completion: @escaping (Result<AuthDataResult, Error>) -> Void) {
@@ -15,11 +16,17 @@ class AuthenticationService {
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
             if let error = error {
                 completion(.failure(error))
-            } else if let result = result {
+                return
+            }
+            
+            if let result = result {
                 completion(.success(result))
             }
         }
     }
+
+    
+    
     
     // Additional methods like signOut, resetPassword, etc.
 }
