@@ -12,9 +12,30 @@ struct ProfileSetupView: View {
     
     @State private var email: String = ""
     @State private var username: String = ""
+    @State private var password: String = ""
     @State private var phone: String = ""
     @State private var profilePicture: UIImage? = nil
     @State private var showingImagePicker: Bool = false
+    
+    private var authenticationService = AuthenticationService()
+    
+    
+    func completeSignup(email: String, password: String, username: String, phone: String, profilePicture: UIImage?) {
+        authenticationService.signUp(email: email, password: password) { result in
+            switch result {
+            case .success(_):
+                // Here, after successful signup, you update the user profile
+                userViewModel.updateUserProfile(email: email, password: password, username: username, phone: phone, profilePicture: profilePicture)
+                
+                // Handle any other post-signup logic, like navigating to another view
+            case .failure(let error):
+                // Handle the signup error
+                print("Signup error: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    
     
     var body: some View {
         VStack(spacing: 20) {
@@ -50,10 +71,14 @@ struct ProfileSetupView: View {
             TextField("Phone", text: $phone)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .keyboardType(.phonePad)
+            SecureField("Password", text: $password)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .autocapitalization(.none)
             
             Button("Save Profile") {
-                userViewModel.updateUserProfile(email: email, username: username, phone: phone, profilePicture: profilePicture)
+                userViewModel.signUp(email: email, password: password, username: username, phone: phone, profilePicture: profilePicture)
             }
+
             .padding()
             .background(Color.green)
             .foregroundColor(.white)

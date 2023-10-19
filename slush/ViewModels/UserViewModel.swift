@@ -72,27 +72,28 @@ extension UserViewModel {
                 let metadata = StorageMetadata()
                 metadata.contentType = "image/jpeg"
 
-                storageRef.putData(imageData, metadata: metadata) { (metadata, error) in
-                    if error != nil {
-                        print("Failed to upload image to Firebase Storage:", error!)
-                        return
-                    }
-
-                    storageRef.downloadURL { (url, error) in
-                        guard let downloadURL = url else {
-                            print("An error occurred:", error!)
-                            return
-                        }
-
-                        // Now save the user profile data to Firestore
-                        self?.firestoreService.saveUserProfileData(userId: uid, email: email, username: username, phone: phone, profilePicture: downloadURL) { firestoreResult in
-                            switch firestoreResult {
-                            case .success:
-                                print("User data added to Firestore successfully.")
+                storageRef.putData(imageData, metadata: metadata) { result in
+                    switch result {
+                    case .success(_):
+                        storageRef.downloadURL { result in
+                            switch result {
+                            case .success(let downloadURL):
+                                // Now save the user profile data to Firestore
+                                self?.firestoreService.saveUserProfileData(userId: uid, email: email, username: username, phone: phone, profilePicture: downloadURL) { firestoreResult in
+                                    switch firestoreResult {
+                                    case .success:
+                                        print("User data added to Firestore successfully.")
+                                        self?.userData = User(id: uid, email: email, username: username, phone: phone, profileImageUrl: downloadURL.absoluteString, friends: [])
+                                    case .failure(let error):
+                                        print("Failed to add user data to Firestore: \(error.localizedDescription)")
+                                    }
+                                }
                             case .failure(let error):
-                                print("Failed to add user data to Firestore: \(error.localizedDescription)")
+                                print("An error occurred:", error)
                             }
                         }
+                    case .failure(let error):
+                        print("Failed to upload image to Firebase Storage:", error)
                     }
                 }
 
@@ -108,7 +109,7 @@ extension UserViewModel {
 // MARK: Profile Update ViewModel Operations
 extension UserViewModel {
     
-    func updateUserProfile(email: String, username: String, phone: String, profilePicture: UIImage?) {
+    func updateUserProfile(email: String, password: String, username: String, phone: String, profilePicture: UIImage?) {
         guard let uid = self.userData?.id else {
             print("No user ID found.")
             return

@@ -3,9 +3,14 @@ struct User {
     //key
     var id: String
     
+    var email: String
     //value
     var username: String
     // stores user friends as list of ids
+    var phone: String
+    
+    var profileImageUrl: String
+    
     var friends: [String]
     
     // Add other fields as needed
