@@ -51,8 +51,13 @@ struct SlushApp: App {
                     }
                 }
             } else if userViewModel.isAuthenticated {
-                HomeView(userViewModel: userViewModel)
-                    .transition(.opacity)
+                if userViewModel.isProfileSetupRequired {
+                    ProfileSetupView(userViewModel: userViewModel)
+                        .transition(.opacity)
+                } else {
+                    HomeView(userViewModel: userViewModel)
+                        .transition(.opacity)
+                }
             } else {
                 LoginView(userViewModel: userViewModel)
             }

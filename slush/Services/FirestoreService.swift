@@ -1,8 +1,10 @@
 import FirebaseFirestore
+import FirebaseStorage
 
 class FirestoreService {
     
     private var db = Firestore.firestore()
+
 
     func fetchUser(withUID uid: String, completion: @escaping (Result<User, Error>) -> Void) {
             db.collection("users").document(uid).getDocument { (document, error) in
@@ -27,7 +29,55 @@ class FirestoreService {
         }
     }
 
-    // Additional methods like updateUser, deleteUser, etc.
+
+    func saveUserProfileData(userId: String, email: String, username: String, phone: String, profilePicture: URL, completion: @escaping (Result<Void, Error>) -> Void) {
+
+        // Reference to the users collection
+        let userRef = Firestore.firestore().collection("users").document(userId)
+
+        // The data you want to save
+        let userData: [String: Any] = [
+            "email": email,
+            "username": username,
+            "phone": phone,
+            "profilePicture": profilePicture.absoluteString
+            // You might save other data as required
+        ]
+
+        // Set the data for the specific user
+        userRef.setData(userData) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+
+    func uploadProfileImage(_ image: UIImage, for uid: String, completion: @escaping (Result<URL, Error>) -> Void) {
+        guard let imageData = image.jpegData(compressionQuality: 0.5) else {
+            completion(.failure(NSError(domain: "Invalid Image Data", code: 1001, userInfo: nil)))
+            return
+        }
+        let storage = Storage.storage()
+        let storageRef = storage.reference().child("profile_images/\(uid).jpg")
+
+        storageRef.putData(imageData, metadata: nil) { (metadata, error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            storageRef.downloadURL { (url, error) in
+                if let error = error {
+                    completion(.failure(error))
+                } else if let downloadURL = url {
+                    completion(.success(downloadURL))
+                }
+            }
+        }
+    }
+
     
     
     func getUserByUsername(username: String, completion: @escaping (Result<User, Error>) -> Void) {
