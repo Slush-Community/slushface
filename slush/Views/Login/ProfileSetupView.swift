@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ProfileSetupView: View {
     @ObservedObject var userViewModel: UserViewModel
+    init(userViewModel: UserViewModel) {
+        self.userViewModel = userViewModel
+    }
     
     @State private var email: String = ""
     @State private var username: String = ""
