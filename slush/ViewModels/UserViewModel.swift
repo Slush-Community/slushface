@@ -9,7 +9,8 @@ class UserViewModel: ObservableObject {
     @Published var isProfileSetupRequired: Bool = false
     // currently only used for searchForUser
     @Published var searchedUser: User?
-    
+    @Published var favoriteUsers: [User] = []
+    @Published var friendsActivity: [Activity] = []
     
     private var authService = AuthenticationService()
     private var firestoreService = FirestoreService()
@@ -18,14 +19,15 @@ class UserViewModel: ObservableObject {
         firestoreService.fetchUser(withUID: uid) { [weak self] result in
             switch result {
                 case .success(let user):
+                    // Here 'user' is the User object returned from fetchUser
                     self?.userData = user
-                    self?.isAuthenticated = true
                 case .failure(let error):
                     print("Error occurred: \(error.localizedDescription)")
             }
         }
     }
-    
+
+
     
     func searchForUser(username: String) {
         firestoreService.getUserByUsername(username: username) { [weak self] result in
@@ -62,38 +64,50 @@ extension UserViewModel {
                 print("User signed up successfully.")
                 let uid = authResult.user.uid
                 
-                guard let image = profilePicture, let imageData = image.jpegData(compressionQuality: 0.8) else {
-                    print("Error converting UIImage to Data")
-                    return
-                }
+                // Check if a profile picture is provided
+                if let image = profilePicture, let imageData = image.jpegData(compressionQuality: 0.8) {
+                    // Upload to Firebase Storage
+                    let storageRef = Storage.storage().reference().child("profile_pictures/\(uid).jpg")
+                    let metadata = StorageMetadata()
+                    metadata.contentType = "image/jpeg"
 
-                // Upload to Firebase Storage
-                let storageRef = Storage.storage().reference().child("profile_pictures/\(uid).jpg")
-                let metadata = StorageMetadata()
-                metadata.contentType = "image/jpeg"
-
-                storageRef.putData(imageData, metadata: metadata) { result in
-                    switch result {
-                    case .success(_):
-                        storageRef.downloadURL { result in
-                            switch result {
-                            case .success(let downloadURL):
-                                // Now save the user profile data to Firestore
-                                self?.firestoreService.saveUserProfileData(userId: uid, email: email, username: username, phone: phone, profilePicture: downloadURL) { firestoreResult in
-                                    switch firestoreResult {
-                                    case .success:
-                                        print("User data added to Firestore successfully.")
-                                        self?.userData = User(id: uid, email: email, username: username, phone: phone, profileImageUrl: downloadURL.absoluteString, friends: [])
-                                    case .failure(let error):
-                                        print("Failed to add user data to Firestore: \(error.localizedDescription)")
+                    storageRef.putData(imageData, metadata: metadata) { result in
+                        switch result {
+                        case .success(_):
+                            // Fetch the download URL of the uploaded image
+                            storageRef.downloadURL { result in
+                                switch result {
+                                case .success(let downloadURL):
+                                    // Save the user profile data to Firestore
+                                    self?.firestoreService.saveUserProfileData(userId: uid, email: email, username: username, phone: phone, profilePicture: downloadURL) { firestoreResult in
+                                        switch firestoreResult {
+                                        case .success:
+                                            print("User data added to Firestore successfully.")
+                                            // Create the User object and assign to userData
+                                            self?.userData = User(id: uid, email: email, username: username, phone: phone, profileImageUrl: downloadURL.absoluteString, friends: [], favoriteUserIDs: [])
+                                        case .failure(let error):
+                                            print("Failed to add user data to Firestore: \(error.localizedDescription)")
+                                        }
                                     }
+                                case .failure(let error):
+                                    print("An error occurred:", error)
                                 }
-                            case .failure(let error):
-                                print("An error occurred:", error)
                             }
+                        case .failure(let error):
+                            print("Failed to upload image to Firebase Storage:", error)
                         }
-                    case .failure(let error):
-                        print("Failed to upload image to Firebase Storage:", error)
+                    }
+                } else {
+                    // No profile picture provided, save other user data to Firestore
+                    self?.firestoreService.saveUserProfileData(userId: uid, email: email, username: username, phone: phone, profilePicture: URL(string: "default_url")!) { firestoreResult in
+                        switch firestoreResult {
+                        case .success:
+                            print("User data added to Firestore successfully.")
+                            // Create the User object with a default or placeholder URL and assign to userData
+                            self?.userData = User(id: uid, email: email, username: username, phone: phone, profileImageUrl: "default_url", friends: [], favoriteUserIDs: [])
+                        case .failure(let error):
+                            print("Failed to add user data to Firestore: \(error.localizedDescription)")
+                        }
                     }
                 }
 
@@ -102,6 +116,8 @@ extension UserViewModel {
             }
         }
     }
+
+
 
     // Additional methods for sign up, sign out, etc.
 }
@@ -188,4 +204,71 @@ extension UserViewModel {
             }
         }
     }
+    
+    func fetchFavoriteUsers() {
+        guard let currentUserID = self.userData?.id else { return }
+
+        firestoreService.fetchFavoriteUserIDs(forUserID: currentUserID) { [weak self] result in
+            switch result {
+            case .success(let favoriteUserIDs):
+                self?.loadFavoriteUsersDetails(userIDs: favoriteUserIDs)
+            case .failure(let error):
+                print("Error fetching favorite user IDs: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func loadFavoriteUsersDetails(userIDs: [String]) {
+        firestoreService.fetchUsers(byIDs: userIDs) { [weak self] result in
+            switch result {
+            case .success(let users):
+                self?.favoriteUsers = users
+            case .failure(let error):
+                print("Error fetching favorite users: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    
+    func addFavoriteUser(favoriteUserID: String) {
+        guard let currentUserID = self.userData?.id else { return }
+
+        firestoreService.addFavoriteUser(currentUserID: currentUserID, favoriteUserID: favoriteUserID) { result in
+            switch result {
+            case .success:
+                self.fetchFavoriteUsers()  // Refresh the favorite users list
+            case .failure(let error):
+                print("Error adding favorite user: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func removeFavoriteUser(favoriteUserID: String) {
+        guard let currentUserID = self.userData?.id else { return }
+
+        firestoreService.removeFavoriteUser(currentUserID: currentUserID, favoriteUserID: favoriteUserID) { result in
+            switch result {
+            case .success:
+                self.fetchFavoriteUsers()  // Refresh the favorite users list
+            case .failure(let error):
+                print("Error removing favorite user: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    
+    func fetchFriendsActivity() {
+        guard let currentUserID = self.userData?.id else { return }
+
+        firestoreService.fetchFriendsActivity(forUserID: currentUserID) { [weak self] result in
+            switch result {
+            case .success(let activities):
+                self?.friendsActivity = activities
+            case .failure(let error):
+                print("Error fetching friends' activities: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    
 }

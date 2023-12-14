@@ -18,7 +18,8 @@ class FirestoreService {
                 let profileImageUrl = data["profileImageUrl"] as? String ?? ""
                 let friends = data["friends"] as? [String] ?? []
 
-                let user = User(id: uid, email: email, username: username, phone: phone, profileImageUrl: profileImageUrl, friends: friends)
+                let user = User(id: uid, email: email, username: username, phone: phone, profileImageUrl: profileImageUrl, friends: friends, favoriteUserIDs: [])
+
 
                 completion(.success(user))
             }
@@ -99,7 +100,8 @@ class FirestoreService {
                 let username = data["username"] as? String ?? ""
                 let friends = data["friends"] as? [String] ?? []
                 
-                let user = User(id: id, email: email, username: username, phone: phone, profileImageUrl: profileImageUrl, friends: friends)
+                let user = User(id: id, email: email, username: username, phone: phone, profileImageUrl: profileImageUrl, friends: friends, favoriteUserIDs: [])
+
                 completion(.success(user))
             } else {
                 completion(.failure(NSError(domain: "No user found", code: 404, userInfo: nil)))
@@ -157,6 +159,154 @@ extension FirestoreService {
             }
         }
     }
+    
+    func fetchFavoriteUserIDs(forUserID userID: String, completion: @escaping (Result<[String], Error>) -> Void) {
+        db.collection("users").document(userID).getDocument { document, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            guard let document = document, document.exists,
+                  let data = document.data(),
+                  let favoriteUserIDs = data["favoriteUserIDs"] as? [String] else {
+                completion(.failure(NSError(domain: "FirestoreService", code: 0, userInfo: [NSLocalizedDescriptionKey: "No favoriteUserIDs found or invalid data structure"])))
+                return
+            }
+            completion(.success(favoriteUserIDs))
+        }
+    }
+    
+    func fetchUsers(byIDs userIDs: [String], completion: @escaping (Result<[User], Error>) -> Void) {
+        let group = DispatchGroup()
+        var users: [User] = []
+        var anyError: Error?
+
+        for userID in userIDs {
+            group.enter()
+            db.collection("users").document(userID).getDocument { document, error in
+                defer { group.leave() }
+                if let error = error {
+                    anyError = error
+                    return
+                }
+                if let document = document, document.exists, let user = User.from(document: document) {
+                    users.append(user)
+                }
+            }
+        }
+
+        group.notify(queue: .main) {
+            if let error = anyError {
+                completion(.failure(error))
+            } else {
+                completion(.success(users))
+            }
+        }
+    }
+    
+    func addFavoriteUser(currentUserID: String, favoriteUserID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let userRef = db.collection("users").document(currentUserID)
+        db.runTransaction({ (transaction, errorPointer) -> Any? in
+            let userDocument: DocumentSnapshot
+            do {
+                try userDocument = transaction.getDocument(userRef)
+            } catch let fetchError as NSError {
+                errorPointer?.pointee = fetchError
+                return nil
+            }
+
+            guard var favoriteUserIDs = userDocument.data()?["favoriteUserIDs"] as? [String] else {
+                let error = NSError(domain: "FirestoreService", code: 0, userInfo: [NSLocalizedDescriptionKey: "Unable to fetch favorite users."])
+                errorPointer?.pointee = error
+                return nil
+            }
+
+            if !favoriteUserIDs.contains(favoriteUserID) {
+                favoriteUserIDs.append(favoriteUserID)
+                transaction.updateData(["favoriteUserIDs": favoriteUserIDs], forDocument: userRef)
+            }
+
+            return nil
+        }) { (_, error) in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+    
+    func removeFavoriteUser(currentUserID: String, favoriteUserID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let userRef = db.collection("users").document(currentUserID)
+        db.runTransaction({ (transaction, errorPointer) -> Any? in
+            let userDocument: DocumentSnapshot
+            do {
+                try userDocument = transaction.getDocument(userRef)
+            } catch let fetchError as NSError {
+                errorPointer?.pointee = fetchError
+                return nil
+            }
+
+            guard var favoriteUserIDs = userDocument.data()?["favoriteUserIDs"] as? [String] else {
+                let error = NSError(domain: "FirestoreService", code: 0, userInfo: [NSLocalizedDescriptionKey: "Unable to fetch favorite users."])
+                errorPointer?.pointee = error
+                return nil
+            }
+
+            if let index = favoriteUserIDs.firstIndex(of: favoriteUserID) {
+                favoriteUserIDs.remove(at: index)
+                transaction.updateData(["favoriteUserIDs": favoriteUserIDs], forDocument: userRef)
+            }
+
+            return nil
+        }) { (_, error) in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+    
+    
+    func fetchFriendsActivity(forUserID userID: String, completion: @escaping (Result<[Activity], Error>) -> Void) {
+        // Implement the logic to fetch activities from Firebase
+        // This is a simplified example. Adapt it based on your Firestore structure.
+
+        db.collection("activities")  // Assuming you have an 'activities' collection
+          .whereField("userID", isEqualTo: userID)
+          .getDocuments { (querySnapshot, error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            let activities = querySnapshot?.documents.compactMap { document -> Activity? in
+                // Map the Firestore document to an Activity object
+                // Adjust this based on your actual data structure
+                let data = document.data()
+                let typeRawValue = data["type"] as? String ?? ""
+                let type = ActivityType(rawValue: typeRawValue) ?? .friendRequest // Adjust default value as needed
+                let date = (data["date"] as? Timestamp)?.dateValue() ?? Date()
+                let involvedUserID = data["involvedUserID"] as? String ?? ""
+                let involvedUserName = data["involvedUserName"] as? String ?? ""
+                let slushID = data["slushID"] as? String
+                let slushTitle = data["slushTitle"] as? String
+                
+                return Activity(id: document.documentID,
+                                type: type,
+                                date: date,
+                                involvedUserID: involvedUserID,
+                                involvedUserName: involvedUserName,
+                                slushID: slushID,
+                                slushTitle: slushTitle)
+            }
+            completion(.success(activities ?? []))
+        }
+    }
+    
+
+
 
 }
 
