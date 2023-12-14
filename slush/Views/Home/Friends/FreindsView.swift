@@ -46,6 +46,41 @@ struct FriendsView: View {
                         .cornerRadius(10)
                 }
             }
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(userViewModel.favoriteUsers, id: \.id) { user in
+                        NavigationLink(destination: UserProfileView(user: user)) {
+                            if let imageUrl = URL(string: user.profileImageUrl), let imageData = try? Data(contentsOf: imageUrl), let image = UIImage(data: imageData) {
+                                // Display user's profile picture
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 60, height: 60)
+                                    .clipShape(Circle())
+                            } else {
+                                // Display user's initials in a circle as a placeholder
+                                Circle()
+                                    .fill(Color.blue)
+                                    .frame(width: 60, height: 60)
+                                    .overlay(Text(user.initials))
+                            }
+                        }
+                    }
+                }
+            }
+            .padding()
+            
+            VStack {
+                Text("Friends' Activity")
+                    .font(.headline)
+                ScrollView {
+                    ForEach(userViewModel.friendsActivity, id: \.id) { activity in
+                        Text(activity.description) // Replace with actual activity view
+                    }
+                }
+            }
+            .padding()
         }
     }
 }
