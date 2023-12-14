@@ -72,16 +72,15 @@ struct LoginView: View {
                     
                     Spacer()
                     
-                    Button(action: {
-                        showProfileSetup.toggle()
-                    }) {
-                        Text("Don't have an account? Sign Up")
-                            .foregroundColor(Color.gray)
+                    NavigationLink(destination: ProfileSetupView(userViewModel: userViewModel)) {
+                        Text("Sign-up")
+                            .font(.headline)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(15)
                     }
-                    .sheet(isPresented: $showProfileSetup) {
-                        ProfileSetupView(userViewModel: userViewModel)
-                    }
-                    .padding(.bottom)
                 }
                 .padding()
                 .blur(radius: isLoading ? 5 : 0)
