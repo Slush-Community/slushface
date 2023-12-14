@@ -26,7 +26,7 @@ struct FriendsView: View {
                 }) {
                     Text("Search")
                         .padding()
-                        .background(Color.blue)
+                        .background(Color.red)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
