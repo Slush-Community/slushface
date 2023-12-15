@@ -33,7 +33,7 @@ struct FriendsView: View {
             }
             .padding()
 
-            // Display the search result
+            /*// Display the search result
             if let user = userViewModel.searchedUser {
                 Text("Found: \(user.username)")
                 Button(action: {
@@ -51,13 +51,14 @@ struct FriendsView: View {
                 HStack {
                     ForEach(userViewModel.favoriteUsers, id: \.id) { user in
                         NavigationLink(destination: UserProfileView(user: user)) {
-                            if let imageUrl = URL(string: user.profileImageUrl), let imageData = try? Data(contentsOf: imageUrl), let image = UIImage(data: imageData) {
-                                // Display user's profile picture
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 60, height: 60)
-                                    .clipShape(Circle())
+                            if let imageUrl = URL(string: user.profileImageUrl) {
+                                AsyncImage(url: imageUrl) { image in
+                                    image.resizable()
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                                .frame(width: 60, height: 60)
+                                .clipShape(Circle())
                             } else {
                                 // Display user's initials in a circle as a placeholder
                                 Circle()
@@ -80,7 +81,7 @@ struct FriendsView: View {
                     }
                 }
             }
-            .padding()
+            .padding() */
         }
     }
 }
