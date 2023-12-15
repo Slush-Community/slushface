@@ -260,14 +260,17 @@ extension UserViewModel {
     func fetchFriendsActivity() {
         guard let currentUserID = self.userData?.id else { return }
 
-        firestoreService.fetchFriendsActivity(forUserID: currentUserID) { [weak self] result in
+        firestoreService.fetchFriendsActivity(forUserID: currentUserID) { [weak self] (result: Result<[Activity], Error>) in
             switch result {
             case .success(let activities):
+                // Handle successful retrieval of activities
                 self?.friendsActivity = activities
             case .failure(let error):
+                // Handle failure, possibly set an error state or log the error
                 print("Error fetching friends' activities: \(error.localizedDescription)")
             }
         }
+
     }
 
     

@@ -30,4 +30,3 @@ enum ActivityType: String {
     case joinSlush = "joinSlush"
     case createSlush = "createSlush"
 }
-
