@@ -11,18 +11,22 @@ class UserViewModel: ObservableObject {
     @Published var searchedUser: User?
     @Published var favoriteUsers: [User] = []
     @Published var friendsActivity: [Activity] = []
+    @Published var loginError: String?
     
     private var authService = AuthenticationService()
     private var firestoreService = FirestoreService()
     
-    private func fetchUserData(uid: String) {
+    private func fetchUserData(uid: String, completion: @escaping (Bool) -> Void) {
         firestoreService.fetchUser(withUID: uid) { [weak self] result in
-            switch result {
+            DispatchQueue.main.async {
+                switch result {
                 case .success(let user):
-                    // Here 'user' is the User object returned from fetchUser
                     self?.userData = user
+                    completion(true)
                 case .failure(let error):
                     print("Error occurred: \(error.localizedDescription)")
+                    completion(false)
+                }
             }
         }
     }
@@ -47,12 +51,20 @@ extension UserViewModel {
     
     func login(username: String, password: String) {
         authService.signIn(email: username, password: password) { [weak self] result in
-            switch result {
+            DispatchQueue.main.async {
+                switch result {
                 case .success(let authResult):
                     let uid = authResult.user.uid
-                    self?.fetchUserData(uid: uid)
+                    self?.fetchUserData(uid: uid) { success in
+                        if success {
+                            self?.isAuthenticated = true
+                        } else {
+                            self?.loginError = "Failed to fetch user data."
+                        }
+                    }
                 case .failure(let error):
-                    print("Error occurred: \(error.localizedDescription)")
+                    self?.loginError = "Login failed: \(error.localizedDescription)"
+                }
             }
         }
     }
