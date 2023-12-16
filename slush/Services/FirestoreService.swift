@@ -6,6 +6,8 @@ class FirestoreService {
     
     private var db = Firestore.firestore()
 
+    
+// MARK: Fetch/Set UserProfile Data
 
     func fetchUser(withUID uid: String, completion: @escaping (Result<User, Error>) -> Void) {
         db.collection("users").document(uid).getDocument { (document, error) in
@@ -111,7 +113,7 @@ class FirestoreService {
 
 }
 
-// MARK: Freind Database Operations
+// MARK: Add/Remove Friend Data
 extension FirestoreService {
     
     func addFriend(uid: String, friendUID: String, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -159,6 +161,8 @@ extension FirestoreService {
             }
         }
     }
+    
+// MARK: Add/Remove Favorites
     
     func fetchFavoriteUserIDs(forUserID userID: String, completion: @escaping (Result<[String], Error>) -> Void) {
         db.collection("users").document(userID).getDocument { document, error in
@@ -267,7 +271,8 @@ extension FirestoreService {
             }
         }
     }
-    
+
+// MARK: Friends Activity
     
     func fetchFriendsActivity(forUserID userID: String, completion: @escaping (Result<[Activity], Error>) -> Void) {
         // Implement the logic to fetch activities from Firebase
