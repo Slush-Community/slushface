@@ -15,6 +15,8 @@ class UserViewModel: ObservableObject {
     
     private var authService = AuthenticationService()
     private var firestoreService = FirestoreService()
+
+// MARK: User Fetch/Search Functions
     
     private func fetchUserData(uid: String, completion: @escaping (Bool) -> Void) {
         firestoreService.fetchUser(withUID: uid) { [weak self] result in
@@ -46,7 +48,7 @@ class UserViewModel: ObservableObject {
     }
 }
 
-// MARK: Login ViewModel Operations
+// MARK: Login/Signup Functions
 extension UserViewModel {
     
     func login(username: String, password: String) {
@@ -134,7 +136,7 @@ extension UserViewModel {
     // Additional methods for sign up, sign out, etc.
 }
 
-// MARK: Profile Update ViewModel Operations
+// MARK: Update Profile Functions
 extension UserViewModel {
     
     func updateUserProfile(email: String, password: String, username: String, phone: String, profilePicture: UIImage?) {
@@ -182,7 +184,7 @@ extension UserViewModel {
 
 }
 
-// MARK: Friends ViewModel Operations
+// MARK: Friend Mgmnt Functions
 extension UserViewModel {
 
     func addFriend(friendUID: String) {
@@ -216,6 +218,8 @@ extension UserViewModel {
             }
         }
     }
+    
+// MARK: Favorites Functions
     
     func fetchFavoriteUsers() {
         guard let currentUserID = self.userData?.id else { return }
@@ -268,6 +272,8 @@ extension UserViewModel {
         }
     }
 
+    
+// MARK: Activity Functions
     
     func fetchFriendsActivity() {
         guard let currentUserID = self.userData?.id else { return }
