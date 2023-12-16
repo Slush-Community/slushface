@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		262282472B2DFE960087BBE4 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262282452B2DFE950087BBE4 /* FriendsView.swift */; };
+		262282482B2DFE960087BBE4 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262282462B2DFE960087BBE4 /* UserProfileView.swift */; };
+		2622824A2B2DFEAB0087BBE4 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262282492B2DFEAB0087BBE4 /* Activity.swift */; };
 		265890A72ACCC5E6007C1E64 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265890A62ACCC5E6007C1E64 /* SettingsView.swift */; };
 		26D597412AE19DA60067B464 /* ProfileSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D597402AE19DA60067B464 /* ProfileSetupView.swift */; };
 		26D597432AE1BE190067B464 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D597422AE1BE190067B464 /* ImagePicker.swift */; };
@@ -41,7 +44,6 @@
 		712E7A7B2ACBCF41002B04DA /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712E7A7A2ACBCF41002B04DA /* ListView.swift */; };
 		712E7A7E2ACBCF7D002B04DA /* MarketplaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712E7A7D2ACBCF7D002B04DA /* MarketplaceView.swift */; };
 		71B48C5A2A9E8F0100749B6D /* MessagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B48C552A9E8F0100749B6D /* MessagingView.swift */; };
-		71CCD85D2ACF57A6006FD555 /* FreindsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CCD85C2ACF57A6006FD555 /* FreindsView.swift */; };
 		71DC4D432A54878100244C9B /* slushApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71DC4D422A54878100244C9B /* slushApp.swift */; };
 		71DC4D472A54878200244C9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71DC4D462A54878200244C9B /* Assets.xcassets */; };
 		71DC4D4A2A54878200244C9B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71DC4D492A54878200244C9B /* Preview Assets.xcassets */; };
@@ -68,6 +70,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		262282452B2DFE950087BBE4 /* FriendsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
+		262282462B2DFE960087BBE4 /* UserProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
+		262282492B2DFEAB0087BBE4 /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		265890A62ACCC5E6007C1E64 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		26D597402AE19DA60067B464 /* ProfileSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupView.swift; sourceTree = "<group>"; };
 		26D597422AE1BE190067B464 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -88,7 +93,6 @@
 		712E7A7A2ACBCF41002B04DA /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		712E7A7D2ACBCF7D002B04DA /* MarketplaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketplaceView.swift; sourceTree = "<group>"; };
 		71B48C552A9E8F0100749B6D /* MessagingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagingView.swift; sourceTree = "<group>"; };
-		71CCD85C2ACF57A6006FD555 /* FreindsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreindsView.swift; sourceTree = "<group>"; };
 		71DC4D3F2A54878100244C9B /* slush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = slush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71DC4D422A54878100244C9B /* slushApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = slushApp.swift; sourceTree = "<group>"; };
 		71DC4D462A54878200244C9B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -199,6 +203,7 @@
 		712E7A662AB6C9A2002B04DA /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				262282492B2DFEAB0087BBE4 /* Activity.swift */,
 				712E7A672AB6C9A2002B04DA /* User.swift */,
 				712E7A6C2AB6DE26002B04DA /* SlushModel.swift */,
 			);
@@ -244,7 +249,8 @@
 		71CCD85B2ACF5794006FD555 /* Friends */ = {
 			isa = PBXGroup;
 			children = (
-				71CCD85C2ACF57A6006FD555 /* FreindsView.swift */,
+				262282452B2DFE950087BBE4 /* FriendsView.swift */,
+				262282462B2DFE960087BBE4 /* UserProfileView.swift */,
 			);
 			path = Friends;
 			sourceTree = "<group>";
@@ -463,19 +469,21 @@
 				712E7A762AB6E026002B04DA /* SlushSpendView.swift in Sources */,
 				71B48C5A2A9E8F0100749B6D /* MessagingView.swift in Sources */,
 				26D597412AE19DA60067B464 /* ProfileSetupView.swift in Sources */,
+				262282472B2DFE960087BBE4 /* FriendsView.swift in Sources */,
 				712E7A6A2AB6C9A2002B04DA /* UserViewModel.swift in Sources */,
 				71DC4D432A54878100244C9B /* slushApp.swift in Sources */,
 				712E7A7B2ACBCF41002B04DA /* ListView.swift in Sources */,
 				710E21762A80512200B3117C /* HomeView.swift in Sources */,
 				712E7A6D2AB6DE26002B04DA /* SlushModel.swift in Sources */,
+				262282482B2DFE960087BBE4 /* UserProfileView.swift in Sources */,
 				710E218D2A80531D00B3117C /* AppDelegate.swift in Sources */,
 				712E7A692AB6C9A2002B04DA /* FirestoreService.swift in Sources */,
-				71CCD85D2ACF57A6006FD555 /* FreindsView.swift in Sources */,
 				712E7A682AB6C9A2002B04DA /* AuthenticationService.swift in Sources */,
 				712E7A6B2AB6C9A2002B04DA /* User.swift in Sources */,
 				712E7A742AB6E018002B04DA /* SlushInviteView.swift in Sources */,
 				712E7A6F2AB6DE54002B04DA /* SlushViewModel.swift in Sources */,
 				712E7A782ACBCED8002B04DA /* SlushHomeView.swift in Sources */,
+				2622824A2B2DFEAB0087BBE4 /* Activity.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
