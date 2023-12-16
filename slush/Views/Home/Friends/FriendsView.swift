@@ -33,7 +33,7 @@ struct FriendsView: View {
             }
             .padding()
 
-            /*// Display the search result
+            // Display the search result
             if let user = userViewModel.searchedUser {
                 Text("Found: \(user.username)")
                 Button(action: {
@@ -46,7 +46,7 @@ struct FriendsView: View {
                         .cornerRadius(10)
                 }
             }
-            
+            /*
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(userViewModel.favoriteUsers, id: \.id) { user in
