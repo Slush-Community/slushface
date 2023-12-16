@@ -10,6 +10,10 @@
 		262282472B2DFE960087BBE4 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262282452B2DFE950087BBE4 /* FriendsView.swift */; };
 		262282482B2DFE960087BBE4 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262282462B2DFE960087BBE4 /* UserProfileView.swift */; };
 		2622824A2B2DFEAB0087BBE4 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262282492B2DFEAB0087BBE4 /* Activity.swift */; };
+		2622824C2B2E47FD0087BBE4 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2622824B2B2E47FD0087BBE4 /* Message.swift */; };
+		2622824E2B2E487B0087BBE4 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2622824D2B2E487B0087BBE4 /* Conversation.swift */; };
+		262282512B2E49990087BBE4 /* MessageListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262282502B2E49990087BBE4 /* MessageListView.swift */; };
+		262282532B2E4D650087BBE4 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262282522B2E4D650087BBE4 /* MessageView.swift */; };
 		265890A72ACCC5E6007C1E64 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265890A62ACCC5E6007C1E64 /* SettingsView.swift */; };
 		26D597412AE19DA60067B464 /* ProfileSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D597402AE19DA60067B464 /* ProfileSetupView.swift */; };
 		26D597432AE1BE190067B464 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D597422AE1BE190067B464 /* ImagePicker.swift */; };
@@ -73,6 +77,10 @@
 		262282452B2DFE950087BBE4 /* FriendsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
 		262282462B2DFE960087BBE4 /* UserProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		262282492B2DFEAB0087BBE4 /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
+		2622824B2B2E47FD0087BBE4 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		2622824D2B2E487B0087BBE4 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
+		262282502B2E49990087BBE4 /* MessageListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageListView.swift; sourceTree = "<group>"; };
+		262282522B2E4D650087BBE4 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		265890A62ACCC5E6007C1E64 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		26D597402AE19DA60067B464 /* ProfileSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupView.swift; sourceTree = "<group>"; };
 		26D597422AE1BE190067B464 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -135,6 +143,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2622824F2B2E495F0087BBE4 /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				262282502B2E49990087BBE4 /* MessageListView.swift */,
+				262282522B2E4D650087BBE4 /* MessageView.swift */,
+			);
+			path = Message;
+			sourceTree = "<group>";
+		};
 		265890A52ACCC5C0007C1E64 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -155,6 +172,7 @@
 		710E21722A80512200B3117C /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				2622824F2B2E495F0087BBE4 /* Message */,
 				71CCD85B2ACF5794006FD555 /* Friends */,
 				265890A52ACCC5C0007C1E64 /* Settings */,
 				712E7A702AB6DF1F002B04DA /* SlushView */,
@@ -206,6 +224,8 @@
 				262282492B2DFEAB0087BBE4 /* Activity.swift */,
 				712E7A672AB6C9A2002B04DA /* User.swift */,
 				712E7A6C2AB6DE26002B04DA /* SlushModel.swift */,
+				2622824B2B2E47FD0087BBE4 /* Message.swift */,
+				2622824D2B2E487B0087BBE4 /* Conversation.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -471,17 +491,21 @@
 				26D597412AE19DA60067B464 /* ProfileSetupView.swift in Sources */,
 				262282472B2DFE960087BBE4 /* FriendsView.swift in Sources */,
 				712E7A6A2AB6C9A2002B04DA /* UserViewModel.swift in Sources */,
+				262282512B2E49990087BBE4 /* MessageListView.swift in Sources */,
 				71DC4D432A54878100244C9B /* slushApp.swift in Sources */,
 				712E7A7B2ACBCF41002B04DA /* ListView.swift in Sources */,
 				710E21762A80512200B3117C /* HomeView.swift in Sources */,
+				2622824E2B2E487B0087BBE4 /* Conversation.swift in Sources */,
 				712E7A6D2AB6DE26002B04DA /* SlushModel.swift in Sources */,
 				262282482B2DFE960087BBE4 /* UserProfileView.swift in Sources */,
 				710E218D2A80531D00B3117C /* AppDelegate.swift in Sources */,
 				712E7A692AB6C9A2002B04DA /* FirestoreService.swift in Sources */,
 				712E7A682AB6C9A2002B04DA /* AuthenticationService.swift in Sources */,
 				712E7A6B2AB6C9A2002B04DA /* User.swift in Sources */,
+				262282532B2E4D650087BBE4 /* MessageView.swift in Sources */,
 				712E7A742AB6E018002B04DA /* SlushInviteView.swift in Sources */,
 				712E7A6F2AB6DE54002B04DA /* SlushViewModel.swift in Sources */,
+				2622824C2B2E47FD0087BBE4 /* Message.swift in Sources */,
 				712E7A782ACBCED8002B04DA /* SlushHomeView.swift in Sources */,
 				2622824A2B2DFEAB0087BBE4 /* Activity.swift in Sources */,
 			);

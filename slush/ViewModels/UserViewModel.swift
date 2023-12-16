@@ -2,6 +2,7 @@
 import SwiftUI
 import Combine
 import FirebaseStorage
+import FirebaseAuth
 
 class UserViewModel: ObservableObject {
     @Published var userData: User?
@@ -12,6 +13,14 @@ class UserViewModel: ObservableObject {
     @Published var favoriteUsers: [User] = []
     @Published var friendsActivity: [Activity] = []
     @Published var loginError: String?
+    @Published var messages: [Message] = []
+    
+    @Published var currentUserID: String?
+
+    init() {
+        // Fetch the current user's ID from Firebase Authentication
+        currentUserID = Auth.auth().currentUser?.uid
+    }
     
     private var authService = AuthenticationService()
     private var firestoreService = FirestoreService()
@@ -290,6 +299,21 @@ extension UserViewModel {
         }
 
     }
+    
+// MARK: Messaging
+    
+    func sendMessage(_ text: String, to receiverID: String, inConversation conversationID: String) {
+        let message = Message(text: text, senderID: self.userData?.id ?? "", receiverID: receiverID, timestamp: Date())
+        firestoreService.sendMessage(message, inConversation: conversationID) { result in
+            switch result {
+            case .success:
+                print("Message sent successfully.")
+            case .failure(let error):
+                print("Error sending message: \(error.localizedDescription)")
+            }
+        }
+    }
+
 
     
 }

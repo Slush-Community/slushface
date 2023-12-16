@@ -310,7 +310,38 @@ extension FirestoreService {
         }
     }
     
+// MARK: Messaging
+    
+    func fetchMessages(forConversationID conversationID: String, completion: @escaping (Result<[Message], Error>) -> Void) {
+        let db = Firestore.firestore()
+        let conversationRef = db.collection("conversations").document(conversationID)
+        
+        conversationRef.getDocument { document, error in
+            if let document = document, document.exists, let conversationData = document.data() {
+                let messageDictionaries = conversationData["messages"] as? [[String: Any]] ?? []
+                let messages = messageDictionaries.map { Message(dictionary: $0) }
+                completion(.success(messages))
+            } else {
+                completion(.failure(error ?? NSError()))
+            }
+        }
+    }
 
+
+    
+    func sendMessage(_ message: Message, inConversation conversationID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let db = Firestore.firestore()
+        let conversationRef = db.collection("conversations").document(conversationID)
+        conversationRef.updateData([
+            "messages": FieldValue.arrayUnion([message.dictionaryRepresentation])
+        ]) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
 
 
 }
