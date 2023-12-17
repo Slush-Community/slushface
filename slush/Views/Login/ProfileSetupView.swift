@@ -29,16 +29,27 @@ struct ProfileSetupView: View {
         authenticationService.signUp(email: email, password: password) { result in
             switch result {
             case .success(_):
-                // Here, after successful signup, you update the user profile
-                userViewModel.updateUserProfile(email: email, password: password, username: username, phone: phone, profilePicture: profilePicture)
-                
-                // Handle any other post-signup logic, like navigating to another view
+                let displayName = username
+                let birthdate: Date? = nil  // Or provide a default value if necessary
+
+                userViewModel.updateUserProfile(displayName: displayName, birthdate: birthdate, phone: phone, profilePicture: profilePicture) { updateResult in
+                    switch updateResult {
+                    case .success:
+                        // Handle successful profile update
+                        print("Profile updated successfully.")
+                    case .failure(let updateError):
+                        // Handle error in profile update
+                        print("Profile update error: \(updateError.localizedDescription)")
+                    }
+                }
             case .failure(let error):
-                // Handle the signup error
+                // Handle signup error
                 print("Signup error: \(error.localizedDescription)")
             }
         }
     }
+
+
     
     
     
@@ -83,11 +94,24 @@ struct ProfileSetupView: View {
                 
                 
                 Button("Save Profile") {
-                    userViewModel.signUp(email: email, password: password, username: username, phone: phone, profilePicture: profilePicture)
-                    if userViewModel.isAuthenticated {
-                        isNavigating = true
+                    let defaultDisplayName = username // Or any default value you deem appropriate
+                    let defaultBirthdate = Date()     // Placeholder birthdate, adjust as necessary
+                    let defaultTermsAccepted = true   // Assuming terms and privacy policy are accepted for this example
+                    let defaultPrivacyAccepted = true
+
+                    userViewModel.signUp(email: email, password: password, username: username, displayName: defaultDisplayName, birthdate: defaultBirthdate, phone: phone, profilePicture: profilePicture, termsOfServiceAccepted: defaultTermsAccepted, privacyPolicyAccepted: defaultPrivacyAccepted) { result in
+                        switch result {
+                        case .success:
+                            if userViewModel.isAuthenticated {
+                                isNavigating = true
+                            }
+                        case .failure(let error):
+                            print("Signup error: \(error.localizedDescription)")
+                        }
                     }
                 }
+
+
                 
                 .padding()
                 .background(Color.green)
