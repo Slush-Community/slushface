@@ -8,13 +8,15 @@
 import SwiftUI
 
 struct UserProfileView: View {
-    var user: User
+    @ObservedObject var userViewModel: UserViewModel
+//    var user: User
 
     var body: some View {
         // Use the user data to display the profile
         VStack {
-            Text("Username: \(user.username)")
+            Text("Username: \(userViewModel.userData?.username ?? "")")
             // Add more user details as needed
+            
         }
     }
 }
