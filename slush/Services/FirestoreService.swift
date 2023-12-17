@@ -39,21 +39,8 @@ class FirestoreService {
     }
 
 
-    func saveUserProfileData(userId: String, email: String, username: String, phone: String, profilePicture: URL, completion: @escaping (Result<Void, Error>) -> Void) {
-
-        // Reference to the users collection
+    func saveUserProfileData(userId: String, userData: [String: Any], completion: @escaping (Result<Void, Error>) -> Void) {
         let userRef = Firestore.firestore().collection("users").document(userId)
-
-        // The data you want to save
-        let userData: [String: Any] = [
-            "email": email,
-            "username": username,
-            "phone": phone,
-            "profilePicture": profilePicture.absoluteString
-            // You might save other data as required
-        ]
-
-        // Set the data for the specific user
         userRef.setData(userData) { error in
             if let error = error {
                 completion(.failure(error))

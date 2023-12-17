@@ -85,65 +85,59 @@ extension UserViewModel {
         }
     }
     
-    func signUp(email: String, password: String, username: String, phone: String, profilePicture: UIImage?) {
+    func signUp(email: String, password: String, username: String, displayName: String, birthdate: Date?, phone: String?, profilePicture: UIImage?, termsOfServiceAccepted: Bool, privacyPolicyAccepted: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         authService.signUp(email: email, password: password) { [weak self] result in
             switch result {
             case .success(let authResult):
-                print("User signed up successfully.")
                 let uid = authResult.user.uid
                 
-                // Check if a profile picture is provided
-                if let image = profilePicture, let imageData = image.jpegData(compressionQuality: 0.8) {
-                    // Upload to Firebase Storage
-                    let storageRef = Storage.storage().reference().child("profile_pictures/\(uid).jpg")
-                    let metadata = StorageMetadata()
-                    metadata.contentType = "image/jpeg"
-
-                    storageRef.putData(imageData, metadata: metadata) { result in
-                        switch result {
-                        case .success(_):
-                            // Fetch the download URL of the uploaded image
-                            storageRef.downloadURL { result in
-                                switch result {
-                                case .success(let downloadURL):
-                                    // Save the user profile data to Firestore
-                                    self?.firestoreService.saveUserProfileData(userId: uid, email: email, username: username, phone: phone, profilePicture: downloadURL) { firestoreResult in
-                                        switch firestoreResult {
-                                        case .success:
-                                            print("User data added to Firestore successfully.")
-                                            // Create the User object and assign to userData
-                                            self?.userData = User(id: uid, email: email, username: username, phone: phone, profileImageUrl: downloadURL.absoluteString, friends: [], favoriteUserIDs: [])
-                                        case .failure(let error):
-                                            print("Failed to add user data to Firestore: \(error.localizedDescription)")
-                                        }
-                                    }
-                                case .failure(let error):
-                                    print("An error occurred:", error)
-                                }
+                if let image = profilePicture {
+                    self?.firestoreService.uploadProfileImage(image, for: uid) { uploadResult in
+                        switch uploadResult {
+                        case .success(let profilePictureURL):
+                            if let userData = self?.createUserData(email: email, username: username, displayName: displayName, birthdate: birthdate, phone: phone, profilePictureURL: profilePictureURL, termsOfServiceAccepted: termsOfServiceAccepted, privacyPolicyAccepted: privacyPolicyAccepted) {
+                                self?.firestoreService.saveUserProfileData(userId: uid, userData: userData, completion: completion)
                             }
                         case .failure(let error):
-                            print("Failed to upload image to Firebase Storage:", error)
+                            completion(.failure(error))
                         }
                     }
                 } else {
-                    // No profile picture provided, save other user data to Firestore
-                    self?.firestoreService.saveUserProfileData(userId: uid, email: email, username: username, phone: phone, profilePicture: URL(string: "default_url")!) { firestoreResult in
-                        switch firestoreResult {
-                        case .success:
-                            print("User data added to Firestore successfully.")
-                            // Create the User object with a default or placeholder URL and assign to userData
-                            self?.userData = User(id: uid, email: email, username: username, phone: phone, profileImageUrl: "default_url", friends: [], favoriteUserIDs: [])
-                        case .failure(let error):
-                            print("Failed to add user data to Firestore: \(error.localizedDescription)")
-                        }
+                    if let userData = self?.createUserData(email: email, username: username, displayName: displayName, birthdate: birthdate, phone: phone, profilePictureURL: nil, termsOfServiceAccepted: termsOfServiceAccepted, privacyPolicyAccepted: privacyPolicyAccepted) {
+                        self?.firestoreService.saveUserProfileData(userId: uid, userData: userData, completion: completion)
                     }
                 }
 
             case .failure(let error):
-                print("Error occurred: \(error.localizedDescription)")
+                completion(.failure(error))
             }
         }
     }
+
+    private func createUserData(email: String, username: String, displayName: String, birthdate: Date?, phone: String?, profilePictureURL: URL?, termsOfServiceAccepted: Bool, privacyPolicyAccepted: Bool) -> [String: Any] {
+        var userData: [String: Any] = [
+            "email": email,
+            "username": username,
+            "displayName": displayName,
+            "termsOfServiceAccepted": termsOfServiceAccepted,
+            "privacyPolicyAccepted": privacyPolicyAccepted,
+            "joinedDate": Date(),
+            "privacySettings": ["canBeSearched": true]
+        ]
+
+        if let birthdate = birthdate {
+            userData["birthdate"] = Timestamp(date: birthdate)
+        }
+        if let phone = phone {
+            userData["phone"] = phone
+        }
+        if let profilePictureURL = profilePictureURL {
+            userData["profileImageUrl"] = profilePictureURL.absoluteString
+        }
+
+        return userData
+    }
+
 
 
 
@@ -153,48 +147,59 @@ extension UserViewModel {
 // MARK: Update Profile Functions
 extension UserViewModel {
     
-    func updateUserProfile(email: String, password: String, username: String, phone: String, profilePicture: UIImage?) {
+    func updateUserProfile(displayName: String?, birthdate: Date?, phone: String?, profilePicture: UIImage?, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let uid = self.userData?.id else {
-            print("No user ID found.")
+            completion(.failure(MyError.noUserIDFound))
             return
         }
         
+        var userDataToUpdate: [String: Any] = [:]
+        
+        // Add non-nil values to the userDataToUpdate dictionary
+        if let displayName = displayName {
+            userDataToUpdate["displayName"] = displayName
+        }
+        if let birthdate = birthdate {
+            userDataToUpdate["birthdate"] = Timestamp(date: birthdate)
+        }
+        if let phone = phone {
+            userDataToUpdate["phone"] = phone
+        }
+        
         if let image = profilePicture {
-            // Step 1: Upload the UIImage to Firebase Storage
-            firestoreService.uploadProfileImage(image, for: uid) { result in
+            // Upload the UIImage to Firebase Storage
+            self.firestoreService.uploadProfileImage(image, for: uid) { [weak self] result in
                 switch result {
                 case .success(let imageURL):
-                    // Step 2: Receive the download URL from Firebase Storage
-                    
-                    // Step 3: Pass this download URL to saveUserProfileData
-                    self.firestoreService.saveUserProfileData(userId: uid, email: email, username: username, phone: phone, profilePicture: imageURL) { result in
-                        switch result {
-                        case .success:
-                            print("Profile data saved successfully.")
-                        case .failure(let error):
-                            print("Error saving profile data: \(error.localizedDescription)")
-                        }
-                    }
-                    
+                    userDataToUpdate["profileImageUrl"] = imageURL.absoluteString
+                    self?.updateFirestoreUser(uid: uid, userData: userDataToUpdate, completion: completion)
                 case .failure(let error):
-                    print("Failed to upload profile image: \(error.localizedDescription)")
+                    completion(.failure(error))
                 }
             }
         } else {
-            // If no image is provided, just save other details
-            if let profilePictureURL = URL(string: "https://example.com/path/to/image.jpg") {
-                firestoreService.saveUserProfileData(userId: uid, email: email, username: username, phone: phone, profilePicture: profilePictureURL) { result in
-                    switch result {
-                    case .success:
-                        print("Profile data saved successfully.")
-                    case .failure(let error):
-                        print("Error saving profile data: \(error.localizedDescription)")
-                    }
-                }
+            // If no new image is provided, just update the other details
+            self.updateFirestoreUser(uid: uid, userData: userDataToUpdate, completion: completion)
+        }
+    }
 
+    private func updateFirestoreUser(uid: String, userData: [String: Any], completion: @escaping (Result<Void, Error>) -> Void) {
+        firestoreService.saveUserProfileData(userId: uid, userData: userData) { result in
+            switch result {
+            case .success:
+                print("Profile updated successfully.")
+                completion(.success(()))
+            case .failure(let error):
+                print("Error updating profile: \(error.localizedDescription)")
+                completion(.failure(error))
             }
         }
     }
+
+    enum MyError: Error {
+        case noUserIDFound
+    }
+
 
 }
 
