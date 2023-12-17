@@ -41,7 +41,7 @@
 		712E7A692AB6C9A2002B04DA /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712E7A632AB6C9A2002B04DA /* FirestoreService.swift */; };
 		712E7A6A2AB6C9A2002B04DA /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712E7A652AB6C9A2002B04DA /* UserViewModel.swift */; };
 		712E7A6B2AB6C9A2002B04DA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712E7A672AB6C9A2002B04DA /* User.swift */; };
-		712E7A6D2AB6DE26002B04DA /* SlushModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712E7A6C2AB6DE26002B04DA /* SlushModel.swift */; };
+		712E7A6D2AB6DE26002B04DA /* Slush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712E7A6C2AB6DE26002B04DA /* Slush.swift */; };
 		712E7A6F2AB6DE54002B04DA /* SlushViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712E7A6E2AB6DE54002B04DA /* SlushViewModel.swift */; };
 		712E7A722AB6E008002B04DA /* SlushCreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712E7A712AB6E008002B04DA /* SlushCreateView.swift */; };
 		712E7A742AB6E018002B04DA /* SlushInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712E7A732AB6E018002B04DA /* SlushInviteView.swift */; };
@@ -96,7 +96,7 @@
 		712E7A632AB6C9A2002B04DA /* FirestoreService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
 		712E7A652AB6C9A2002B04DA /* UserViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		712E7A672AB6C9A2002B04DA /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		712E7A6C2AB6DE26002B04DA /* SlushModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlushModel.swift; sourceTree = "<group>"; };
+		712E7A6C2AB6DE26002B04DA /* Slush.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slush.swift; sourceTree = "<group>"; };
 		712E7A6E2AB6DE54002B04DA /* SlushViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlushViewModel.swift; sourceTree = "<group>"; };
 		712E7A712AB6E008002B04DA /* SlushCreateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlushCreateView.swift; sourceTree = "<group>"; };
 		712E7A732AB6E018002B04DA /* SlushInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlushInviteView.swift; sourceTree = "<group>"; };
@@ -236,7 +236,7 @@
 			children = (
 				262282492B2DFEAB0087BBE4 /* Activity.swift */,
 				712E7A672AB6C9A2002B04DA /* User.swift */,
-				712E7A6C2AB6DE26002B04DA /* SlushModel.swift */,
+				712E7A6C2AB6DE26002B04DA /* Slush.swift */,
 				2622824B2B2E47FD0087BBE4 /* Message.swift */,
 				2622824D2B2E487B0087BBE4 /* Conversation.swift */,
 				262282542B2E77FC0087BBE4 /* Notifications.swift */,
@@ -511,7 +511,7 @@
 				712E7A7B2ACBCF41002B04DA /* ListView.swift in Sources */,
 				710E21762A80512200B3117C /* HomeView.swift in Sources */,
 				2622824E2B2E487B0087BBE4 /* Conversation.swift in Sources */,
-				712E7A6D2AB6DE26002B04DA /* SlushModel.swift in Sources */,
+				712E7A6D2AB6DE26002B04DA /* Slush.swift in Sources */,
 				262282582B2E79DF0087BBE4 /* NotificationsView.swift in Sources */,
 				262282482B2DFE960087BBE4 /* UserProfileView.swift in Sources */,
 				710E218D2A80531D00B3117C /* AppDelegate.swift in Sources */,
