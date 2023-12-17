@@ -58,7 +58,7 @@ struct HomeView: View {
                                 }
                                 .buttonStyle(PlainButtonStyle())
 
-                                NavigationLink(destination: Text("Page 2")) {
+                                NavigationLink(destination: UserProfileView(userViewModel: userViewModel)) {
                                     Image(systemName: "")
                                         .resizable()
                                         .foregroundColor(.white)
