@@ -85,7 +85,7 @@ extension UserViewModel {
         }
     }
     
-    func signUp(email: String, password: String, username: String, phone: String?, profilePicture: UIImage?, termsOfServiceAccepted: Bool, privacyPolicyAccepted: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+    func signUp(email: String, password: String, username: String, fullname: String, phone: String?, profilePicture: UIImage?, termsOfServiceAccepted: Bool, privacyPolicyAccepted: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         authService.signUp(email: email, password: password) { [weak self] result in
             switch result {
             case .success(let authResult):
@@ -95,7 +95,7 @@ extension UserViewModel {
                     self?.firestoreService.uploadProfileImage(image, for: uid) { uploadResult in
                         switch uploadResult {
                         case .success(let profilePictureURL):
-                            if let userData = self?.createUserData(email: email, username: username, phone: phone, profilePictureURL: profilePictureURL, termsOfServiceAccepted: termsOfServiceAccepted, privacyPolicyAccepted: privacyPolicyAccepted) {
+                            if let userData = self?.createUserData(email: email, username: username, fullname: fullname, phone: phone, profilePictureURL: profilePictureURL, termsOfServiceAccepted: termsOfServiceAccepted, privacyPolicyAccepted: privacyPolicyAccepted) {
                                 self?.firestoreService.saveUserProfileData(userId: uid, userData: userData, completion: completion)
                             }
                         case .failure(let error):
@@ -104,7 +104,7 @@ extension UserViewModel {
                     }
                 } else {
                     let defaultProfilePictureURL = URL(string: "default_profile_picture_url") // Replace with your default URL
-                    if let userData = self?.createUserData(email: email, username: username, phone: phone, profilePictureURL: defaultProfilePictureURL, termsOfServiceAccepted: termsOfServiceAccepted, privacyPolicyAccepted: privacyPolicyAccepted) {
+                    if let userData = self?.createUserData(email: email, username: username, fullname: fullname, phone: phone, profilePictureURL: defaultProfilePictureURL, termsOfServiceAccepted: termsOfServiceAccepted, privacyPolicyAccepted: privacyPolicyAccepted) {
                         self?.firestoreService.saveUserProfileData(userId: uid, userData: userData, completion: completion)
                     }
                 }
@@ -116,10 +116,12 @@ extension UserViewModel {
     }
 
 
-    private func createUserData(email: String, username: String, phone: String?, profilePictureURL: URL?, termsOfServiceAccepted: Bool, privacyPolicyAccepted: Bool) -> [String: Any] {
+
+    private func createUserData(email: String, username: String, fullname: String, phone: String?, profilePictureURL: URL?, termsOfServiceAccepted: Bool, privacyPolicyAccepted: Bool) -> [String: Any] {
         var userData: [String: Any] = [
             "email": email,
             "username": username,
+            "fullname": fullname,  // Added fullname
             "termsOfServiceAccepted": termsOfServiceAccepted,
             "privacyPolicyAccepted": privacyPolicyAccepted,
             "joinedDate": Date(),
@@ -135,11 +137,9 @@ extension UserViewModel {
             userData["profileImageUrl"] = profilePictureURL.absoluteString
         }
 
-        // Assuming birthdate is not part of the signup form and using a placeholder
-        userData["birthdate"] = Timestamp(date: Date()) // Replace with actual birthdate if available
-
         return userData
     }
+
 
 
 

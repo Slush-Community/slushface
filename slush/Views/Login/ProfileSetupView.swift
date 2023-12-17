@@ -13,6 +13,7 @@ struct ProfileSetupView: View {
     @State private var email = ""
     @State private var username = ""
     @State private var password = ""
+    @State private var fullname = ""
     @State private var phone = ""
     @State private var profilePicture: UIImage? = nil
     @State private var showingImagePicker = false
@@ -59,7 +60,7 @@ struct ProfileSetupView: View {
                     .autocapitalization(.none)
 
                 Button("Save Profile") {
-                    completeSignup(email: email, password: password, username: username, phone: phone, profilePicture: profilePicture)
+                    completeSignup(email: email, password: password, username: username, fullname: fullname, phone: phone, profilePicture: profilePicture)
                 }
                 .padding()
                 .background(Color.green)
@@ -76,8 +77,8 @@ struct ProfileSetupView: View {
         }
     }
 
-    private func completeSignup(email: String, password: String, username: String, phone: String, profilePicture: UIImage?) {
-        userViewModel.signUp(email: email, password: password, username: username, phone: phone, profilePicture: profilePicture, termsOfServiceAccepted: true, privacyPolicyAccepted: true) { result in
+    private func completeSignup(email: String, password: String, username: String, fullname: String, phone: String, profilePicture: UIImage?) {
+        userViewModel.signUp(email: email, password: password, username: username, fullname: fullname, phone: phone, profilePicture: profilePicture, termsOfServiceAccepted: true, privacyPolicyAccepted: true) { result in
             switch result {
             case .success:
                 if userViewModel.isAuthenticated {
