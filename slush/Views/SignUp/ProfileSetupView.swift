@@ -7,9 +7,159 @@
 
 import SwiftUI
 
+// MARK: Sign up step 1
+struct SignUpStep1View: View {
+    @Binding var fullname: String
+    @Binding var birthdate: Date
+    @Binding var email: String
+    @Binding var password: String
+    var onNext: () -> Void
+
+    var body: some View {
+        VStack {
+            TextField("Full Name", text: $fullname)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            DatePicker("Birth Date", selection: $birthdate, displayedComponents: .date)
+            TextField("Email", text: $email)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .autocapitalization(.none)
+                .keyboardType(.emailAddress)
+            SecureField("Password", text: $password)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+
+            Button("Next", action: onNext)
+                .disabled(fullname.isEmpty || email.isEmpty || password.isEmpty)
+        }
+        .padding()
+    }
+}
+
+// MARK: Sign up step 2
+struct SignUpStep2View: View {
+    @Binding var phone: String
+    @State private var verificationCode: String = ""
+    var onNext: () -> Void
+
+    var body: some View {
+        VStack {
+            TextField("Phone Number", text: $phone)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .keyboardType(.phonePad)
+            TextField("Verification Code", text: $verificationCode)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+
+            Button("Verify and Next", action: onNext)
+                .disabled(phone.isEmpty || verificationCode.isEmpty)
+        }
+        .padding()
+    }
+}
+
+// MARK: Sign up step 3
+struct SignUpStep3View: View {
+    @Binding var profilePicture: UIImage?
+    @Binding var username: String
+    var onNext: () -> Void
+
+    @State private var showingImagePicker = false
+
+    var body: some View {
+        VStack {
+            Button(action: { showingImagePicker = true }) {
+                if let profileImage = profilePicture {
+                    Image(uiImage: profileImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100)
+                        .clipShape(Circle())
+                } else {
+                    Circle()
+                        .fill(Color.secondary)
+                        .frame(width: 100, height: 100)
+                        .overlay(Text("Add Image"))
+                }
+            }
+            .sheet(isPresented: $showingImagePicker, content: {
+                ImagePicker(isShown: $showingImagePicker, image: $profilePicture)
+            })
+
+            TextField("Username", text: $username)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+
+            Button("Next", action: onNext)
+                .disabled(username.isEmpty)
+        }
+        .padding()
+    }
+}
+
+
+// MARK: Sign up step 4
+struct SignUpStep4View: View {
+    @Binding var termsOfServiceAccepted: Bool
+    var onNext: () -> Void
+
+    var body: some View {
+        VStack {
+            // Display terms of service text
+            Toggle("I accept the Terms of Service", isOn: $termsOfServiceAccepted)
+
+            Button("Next", action: onNext)
+                .disabled(!termsOfServiceAccepted)
+        }
+        .padding()
+    }
+}
+
+// MARK: Sign up step 5
+struct SignUpStep5View: View {
+    @Binding var privacyPolicyAccepted: Bool
+    var onNext: () -> Void
+
+    var body: some View {
+        VStack {
+            // Display privacy policy text
+            Toggle("I accept the Privacy Policy", isOn: $privacyPolicyAccepted)
+
+            Button("Next", action: onNext)
+                .disabled(!privacyPolicyAccepted)
+        }
+        .padding()
+    }
+}
+
+// MARK: Sign up step 6
+struct SignUpStep6View: View {
+    @Binding var email: String
+    @Binding var username: String
+    @Binding var fullname: String
+    @Binding var phone: String
+    @Binding var birthdate: Date
+    @Binding var privacySettings: Bool
+    var onComplete: () -> Void
+    
+    var body: some View {
+        VStack {
+            Text("Is this information correct?")
+            Text("Email: \(email)")
+            Text("Username: \(username)")
+            Text("Full Name: \(fullname)")
+            Text("Phone Number: \(phone)")
+            Text("Date of Birth: \(birthdate, formatter: DateFormatter.shortDate)")
+            Toggle("Publicly Searchable Profile", isOn: $privacySettings)
+
+            Button("Complete Sign Up", action: onComplete)
+        }
+        .padding()
+    }
+}
+
+
+
+
 struct ProfileSetupView: View {
     @ObservedObject var userViewModel: UserViewModel
-
+    @State private var currentStep = 1
     @State private var email = ""
     @State private var username = ""
     @State private var password = ""
@@ -18,76 +168,65 @@ struct ProfileSetupView: View {
     @State private var profilePicture: UIImage? = nil
     @State private var showingImagePicker = false
     @State private var isNavigating = false
+    @State private var birthdate: Date = Date()
+    @State private var termsOfServiceAccepted: Bool = false
+    @State private var privacyPolicyAccepted: Bool = false
+    @State private var privacySettings: Bool = true
+    @Environment(\.presentationMode) var presentationMode
+    @State private var navigateToLogin = false
 
+    
+    
+    
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 20) {
-                if let profileImage = profilePicture {
-                    Image(uiImage: profileImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 100, height: 100)
-                        .clipShape(Circle())
-                } else {
-                    Image(systemName: "person.circle")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 100, height: 100)
-                        .foregroundColor(Color.green.opacity(0.5))
-                }
+            VStack {
+                if currentStep == 1 {
+                    SignUpStep1View(fullname: $fullname, birthdate: $birthdate, email: $email, password: $password, onNext: { currentStep = 2 })
+                } else if currentStep == 2 {
+                    SignUpStep2View(phone: $phone, onNext: { currentStep = 3 })
+                } else if currentStep == 3 {
+                    SignUpStep3View(profilePicture: $profilePicture, username: $username, onNext: { currentStep = 4 })
+                } else if currentStep == 4 {
+                    SignUpStep4View(termsOfServiceAccepted: $termsOfServiceAccepted, onNext: { currentStep = 5 })
+                } else if currentStep == 5 {
+                    SignUpStep5View(privacyPolicyAccepted: $privacyPolicyAccepted, onNext: { currentStep = 6 })
+                } else if currentStep == 6 {
+                    SignUpStep6View(email: $email, username: $username, fullname: $fullname, phone: $phone, birthdate: $birthdate, privacySettings: $privacySettings) {
+                                        completeSignup(email: email, password: password, username: username, fullname: fullname, phone: phone, profilePicture: profilePicture)
+                                    }
+                                }
 
-                Button(action: {
-                    showingImagePicker.toggle()
-                }) {
-                    Text("Select Profile Picture")
-                        .foregroundColor(.green)
-                }
+                                if currentStep > 1 {
+                                    Button("Back") { currentStep -= 1 }
+                                }
 
-                TextField("Email", text: $email)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .autocapitalization(.none)
+                                // NavigationLink to LoginView
+                                NavigationLink(destination: LoginView(userViewModel: userViewModel), isActive: $navigateToLogin) {
+                                    EmptyView()
+                                }
+                            }
+                        }
 
-                TextField("Username", text: $username)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .autocapitalization(.none)
+                        private func completeSignup(email: String, password: String, username: String, fullname: String, phone: String, profilePicture: UIImage?) {
+                            userViewModel.signUp(email: email, password: password, username: username, fullname: fullname, phone: phone, profilePicture: profilePicture, termsOfServiceAccepted: true, privacyPolicyAccepted: true) { result in
+                                switch result {
+                                case .success:
+                                    // Trigger navigation to LoginView
+                                    navigateToLogin = true
+                                case .failure(let error):
+                                    print("Signup error: \(error.localizedDescription)")
+                                }
+                            }
+                        }
+                    }
 
-                TextField("Phone", text: $phone)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .keyboardType(.phonePad)
 
-                SecureField("Password", text: $password)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .autocapitalization(.none)
-
-                Button("Save Profile") {
-                    completeSignup(email: email, password: password, username: username, fullname: fullname, phone: phone, profilePicture: profilePicture)
-                }
-                .padding()
-                .background(Color.green)
-                .foregroundColor(.white)
-                .cornerRadius(10)
-            }
-            .padding()
-            .sheet(isPresented: $showingImagePicker, content: {
-                ImagePicker(isShown: $showingImagePicker, image: $profilePicture)
-            })
-            if isNavigating {
-                HomeView(userViewModel: userViewModel)
-            }
-        }
-    }
-
-    private func completeSignup(email: String, password: String, username: String, fullname: String, phone: String, profilePicture: UIImage?) {
-        userViewModel.signUp(email: email, password: password, username: username, fullname: fullname, phone: phone, profilePicture: profilePicture, termsOfServiceAccepted: true, privacyPolicyAccepted: true) { result in
-            switch result {
-            case .success:
-                if userViewModel.isAuthenticated {
-                    isNavigating = true
-                }
-            case .failure(let error):
-                print("Signup error: \(error.localizedDescription)")
-            }
-        }
-    }
-
+extension DateFormatter {
+    static let shortDate: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .none
+        return formatter
+    }()
 }
+
