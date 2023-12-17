@@ -342,6 +342,36 @@ extension FirestoreService {
             }
         }
     }
+    
+// MARK: Notifications
+    func fetchNotifications(forUserID userID: String, completion: @escaping (Result<[Notification], Error>) -> Void) {
+        let db = Firestore.firestore()
+        db.collection("users").document(userID).collection("notifications").getDocuments { (snapshot, error) in
+            if let error = error {
+                completion(.failure(error))
+            } else if let documents = snapshot?.documents {
+                let notifications = documents.compactMap { document -> Notification? in
+                    let data = document.data()
+                    let id = document.documentID
+                    let title = data["title"] as? String ?? ""
+                    let description = data["description"] as? String ?? ""
+                    let typeRawValue = data["type"] as? String ?? ""
+                    let type = NotificationType(rawValue: typeRawValue) ?? .info
+                    let amount = data["amount"] as? Double
+                    let actionRawValue = data["action"] as? String ?? ""
+                    let action = NotificationAction(rawValue: actionRawValue)
+                    let expiresTimestamp = data["expires"] as? Timestamp
+                    let expires = expiresTimestamp?.dateValue()
+                    
+                    return Notification(id: id, title: title, description: description, type: type, amount: amount, action: action, expires: expires)
+                }
+                completion(.success(notifications))
+            }
+        }
+    }
+    
+    
+
 
 
 }
