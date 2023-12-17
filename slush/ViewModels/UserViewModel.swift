@@ -3,6 +3,7 @@ import SwiftUI
 import Combine
 import FirebaseStorage
 import FirebaseAuth
+import FirebaseFirestore
 
 class UserViewModel: ObservableObject {
     @Published var userData: User?
@@ -16,6 +17,10 @@ class UserViewModel: ObservableObject {
     @Published var messages: [Message] = []
     
     @Published var currentUserID: String?
+    @Published var notifications: [Notification] = []
+    
+    private var notificationsListener: ListenerRegistration?
+    private var cancellables = Set<AnyCancellable>()
 
     init() {
         // Fetch the current user's ID from Firebase Authentication
@@ -314,6 +319,22 @@ extension UserViewModel {
         }
     }
 
+// MARK: Notifications
+    
+    func fetchNotifications() {
+            guard let userID = Auth.auth().currentUser?.uid else { return }
 
+        firestoreService.fetchNotifications(forUserID: userID) { [weak self] result in
+            switch result {
+            case .success(let fetchedNotifications):
+                DispatchQueue.main.async {
+                    self?.notifications = fetchedNotifications
+                }
+            case .failure(let error):
+                // Handle any errors
+                print("Error fetching notifications: \(error.localizedDescription)")
+            }
+        }
+    }
     
 }

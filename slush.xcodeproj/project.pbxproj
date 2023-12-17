@@ -14,6 +14,8 @@
 		2622824E2B2E487B0087BBE4 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2622824D2B2E487B0087BBE4 /* Conversation.swift */; };
 		262282512B2E49990087BBE4 /* MessageListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262282502B2E49990087BBE4 /* MessageListView.swift */; };
 		262282532B2E4D650087BBE4 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262282522B2E4D650087BBE4 /* MessageView.swift */; };
+		262282552B2E77FC0087BBE4 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262282542B2E77FC0087BBE4 /* Notifications.swift */; };
+		262282582B2E79DF0087BBE4 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262282572B2E79DF0087BBE4 /* NotificationsView.swift */; };
 		265890A72ACCC5E6007C1E64 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265890A62ACCC5E6007C1E64 /* SettingsView.swift */; };
 		26D597412AE19DA60067B464 /* ProfileSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D597402AE19DA60067B464 /* ProfileSetupView.swift */; };
 		26D597432AE1BE190067B464 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D597422AE1BE190067B464 /* ImagePicker.swift */; };
@@ -81,6 +83,8 @@
 		2622824D2B2E487B0087BBE4 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		262282502B2E49990087BBE4 /* MessageListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageListView.swift; sourceTree = "<group>"; };
 		262282522B2E4D650087BBE4 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
+		262282542B2E77FC0087BBE4 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		262282572B2E79DF0087BBE4 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
 		265890A62ACCC5E6007C1E64 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		26D597402AE19DA60067B464 /* ProfileSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupView.swift; sourceTree = "<group>"; };
 		26D597422AE1BE190067B464 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -152,6 +156,14 @@
 			path = Message;
 			sourceTree = "<group>";
 		};
+		262282562B2E79B50087BBE4 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				262282572B2E79DF0087BBE4 /* NotificationsView.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
 		265890A52ACCC5C0007C1E64 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -172,6 +184,7 @@
 		710E21722A80512200B3117C /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				262282562B2E79B50087BBE4 /* Notifications */,
 				2622824F2B2E495F0087BBE4 /* Message */,
 				71CCD85B2ACF5794006FD555 /* Friends */,
 				265890A52ACCC5C0007C1E64 /* Settings */,
@@ -226,6 +239,7 @@
 				712E7A6C2AB6DE26002B04DA /* SlushModel.swift */,
 				2622824B2B2E47FD0087BBE4 /* Message.swift */,
 				2622824D2B2E487B0087BBE4 /* Conversation.swift */,
+				262282542B2E77FC0087BBE4 /* Notifications.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -489,6 +503,7 @@
 				712E7A762AB6E026002B04DA /* SlushSpendView.swift in Sources */,
 				71B48C5A2A9E8F0100749B6D /* MessagingView.swift in Sources */,
 				26D597412AE19DA60067B464 /* ProfileSetupView.swift in Sources */,
+				262282552B2E77FC0087BBE4 /* Notifications.swift in Sources */,
 				262282472B2DFE960087BBE4 /* FriendsView.swift in Sources */,
 				712E7A6A2AB6C9A2002B04DA /* UserViewModel.swift in Sources */,
 				262282512B2E49990087BBE4 /* MessageListView.swift in Sources */,
@@ -497,6 +512,7 @@
 				710E21762A80512200B3117C /* HomeView.swift in Sources */,
 				2622824E2B2E487B0087BBE4 /* Conversation.swift in Sources */,
 				712E7A6D2AB6DE26002B04DA /* SlushModel.swift in Sources */,
+				262282582B2E79DF0087BBE4 /* NotificationsView.swift in Sources */,
 				262282482B2DFE960087BBE4 /* UserProfileView.swift in Sources */,
 				710E218D2A80531D00B3117C /* AppDelegate.swift in Sources */,
 				712E7A692AB6C9A2002B04DA /* FirestoreService.swift in Sources */,
