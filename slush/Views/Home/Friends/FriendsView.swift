@@ -47,7 +47,7 @@ struct FriendsView: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
                                 ForEach(userViewModel.favoriteUsers, id: \.id) { user in
-                                    NavigationLink(destination: UserProfileView(user: user)) {
+                                    NavigationLink(destination: UserProfileView(userViewModel: userViewModel)) {
                                         // User representation
                                     }
                                 }
