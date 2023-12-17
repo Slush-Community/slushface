@@ -77,7 +77,7 @@ struct ProfileSetupView: View {
     }
 
     private func completeSignup(email: String, password: String, username: String, phone: String, profilePicture: UIImage?) {
-        userViewModel.signUp(email: email, password: password, username: username, displayName: username, birthdate: nil, phone: phone, profilePicture: profilePicture, termsOfServiceAccepted: true, privacyPolicyAccepted: true) { result in
+        userViewModel.signUp(email: email, password: password, username: username, phone: phone, profilePicture: profilePicture, termsOfServiceAccepted: true, privacyPolicyAccepted: true) { result in
             switch result {
             case .success:
                 if userViewModel.isAuthenticated {
@@ -88,4 +88,5 @@ struct ProfileSetupView: View {
             }
         }
     }
+
 }
