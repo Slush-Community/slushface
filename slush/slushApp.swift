@@ -12,7 +12,7 @@ struct CircleProgress: View {
     var body: some View {
         Circle()
             .trim(from: 0.0, to: CGFloat(min(self.progress, 1.0)))
-            .stroke(Color.black, lineWidth: 5)
+            .stroke(Color.white, lineWidth: 5)
             .rotationEffect(Angle(degrees: 270.0))
     }
 }
@@ -27,18 +27,28 @@ struct SlushApp: App {
     var body: some Scene {
         WindowGroup {
             if isLoading {
-                VStack {
-                    ZStack {
-                        Image(systemName: "dollarsign.circle")
-                            .resizable()
-                            .frame(width: 120, height: 120)
-                            .foregroundColor(Color.green)
-                        
-                        CircleProgress(progress: progress)
-                            .frame(width: 120, height: 120)
-                    }
+                ZStack {
+                    // Match the background color to the Figma design
+                    Color.orange.ignoresSafeArea()
+
+                    // Create a white circular progress indicator
+                    Circle()
+                        .strokeBorder(Color.white.opacity(0), lineWidth: 4)
+                        .frame(width: 120, height: 120)
+
+                    // Add the dollar sign image in white
+                    Image("SLogoNoBack")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 100, height: 100)
+                        .foregroundColor(.white)
+                    
+                    // Assuming CircleProgress is a custom view that you want to use for the actual progress
+                    CircleProgress(progress: progress)
+                        .frame(width: 120, height: 120)
                 }
                 .onAppear {
+                    // Timer to increment progress
                     Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
                         if progress < 1.0 {
                             withAnimation {

@@ -15,24 +15,80 @@ struct SignUpStep1View: View {
     @Binding var password: String
     var onNext: () -> Void
 
-    var body: some View {
-        VStack {
-            TextField("Full Name", text: $fullname)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            DatePicker("Birth Date", selection: $birthdate, displayedComponents: .date)
-            TextField("Email", text: $email)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .autocapitalization(.none)
-                .keyboardType(.emailAddress)
-            SecureField("Password", text: $password)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+    // Use your brand's primary color or adjust as needed
+    let primaryColor = Color.orange
+    let secondaryColor = Color.white
+    let inputBackgroundColor = Color(UIColor.systemGray6)
+    let inputCornerRadius: CGFloat = 10
+    let buttonHeight: CGFloat = 50
+    let shadowRadius: CGFloat = 3
 
-            Button("Next", action: onNext)
-                .disabled(fullname.isEmpty || email.isEmpty || password.isEmpty)
+    var body: some View {
+        VStack(spacing: 15) {
+            Text("Create Your Account")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(primaryColor)
+
+            VStack(spacing: 10) {
+                CustomTextField(placeholder: "Full Name", text: $fullname)
+                
+                CustomDatePicker(placeholder: "Birth Date", date: $birthdate)
+                
+                CustomTextField(placeholder: "Email", text: $email, keyboardType: .emailAddress)
+                
+                CustomSecureField(placeholder: "Password", text: $password)
+            }
+            .padding(.horizontal)
+
+            Spacer() // Use Spacer to push all content to the top
+
+            Button(action: onNext) {
+                Text("Next")
+                    .fontWeight(.semibold)
+                    .foregroundColor(secondaryColor)
+                    .frame(height: buttonHeight)
+                    .frame(maxWidth: .infinity)
+                    .background(fullname.isEmpty || email.isEmpty || password.isEmpty ? Color.gray : primaryColor)
+                    .cornerRadius(inputCornerRadius)
+                    .shadow(radius: shadowRadius)
+            }
+            .disabled(fullname.isEmpty || email.isEmpty || password.isEmpty)
+            .padding(.horizontal)
         }
         .padding()
+        .navigationBarBackButtonHidden(true)
+        .navigationTitle("Sign Up")
+    }
+    
+    // Custom TextField for uniform styling
+    private func CustomTextField(placeholder: String, text: Binding<String>, keyboardType: UIKeyboardType = .default) -> some View {
+        TextField(placeholder, text: text)
+            .padding()
+            .background(inputBackgroundColor)
+            .cornerRadius(inputCornerRadius)
+            .keyboardType(keyboardType)
+            .disableAutocorrection(true)
+            .autocapitalization(.none)
+    }
+    
+    // Custom SecureField for uniform styling
+    private func CustomSecureField(placeholder: String, text: Binding<String>) -> some View {
+        SecureField(placeholder, text: text)
+            .padding()
+            .background(inputBackgroundColor)
+            .cornerRadius(inputCornerRadius)
+    }
+    
+    // Custom DatePicker for uniform styling
+    private func CustomDatePicker(placeholder: String, date: Binding<Date>) -> some View {
+        DatePicker(placeholder, selection: date, displayedComponents: .date)
+            .padding()
+            .background(inputBackgroundColor)
+            .cornerRadius(inputCornerRadius)
     }
 }
+
 
 // MARK: Sign up step 2
 struct SignUpStep2View: View {

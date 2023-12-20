@@ -21,21 +21,27 @@ struct LoginView: View {
     var body: some View {
         NavigationView {
             ZStack {
+                // Match the background color to the Figma design
+                Color.white.ignoresSafeArea()
+
                 VStack(spacing: 20) {
-                    Image(systemName: "dollarsign.circle")
+                    // Replace 'Image(systemName: "dollarsign.circle")' with the logo from your assets if needed
+                    Image("SLogoNoBack")
                         .resizable()
-                        .frame(width: 120, height: 120)
-                        .foregroundColor(Color.green)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 100, height: 100)
+                        .foregroundColor(.orange)
                     
+                    // Update the TextFields to match the design
                     TextField("Username", text: $username)
                         .padding()
-                        .background(Color.gray.opacity(0.2))
+                        .background(Color.white.opacity(0.2))
                         .cornerRadius(10)
                         .autocapitalization(.none)
                     
                     SecureField("Password", text: $password)
                         .padding()
-                        .background(Color.gray.opacity(0.2))
+                        .background(Color.white.opacity(0.2))
                         .cornerRadius(10)
                         .autocapitalization(.none)
                     
@@ -46,51 +52,38 @@ struct LoginView: View {
                     }) {
                         Text("Log In")
                             .padding()
-                            .background(Color.black)
+                            .background(Color.orange)
                             .foregroundColor(.white)
                             .cornerRadius(10)
                     }
                     .padding()
-                    
-                    // Apple Sign In
-                    SignInWithAppleButton(.signIn, onRequest: { request in
-                        // Customize the request here
-                    }, onCompletion: { result in
-                        switch result {
-                        case .success(let authResults):
-                            // Handle success
-                            print(authResults)
-                        case .failure(let error):
-                            // Handle error
-                            print(error.localizedDescription)
-                        }
-                    })
-                    .frame(width: 250, height: 45)
-                    .cornerRadius(10)
-                    
-                    // You'd similarly add a Google Sign In button here, but the code for it would depend on the library/method you're using to integrate Google Sign In.
-                    
+
+                    // Replace this with your actual sign-in buttons, styled according to your design
+                    // ...
+
                     Spacer()
                     
+                    // Update the Sign-up button to match the design
                     NavigationLink(destination: ProfileSetupView(userViewModel: userViewModel)) {
                         Text("Sign-up")
                             .font(.headline)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
-                            .background(Color.blue)
+                            .background(Color.orange)
                             .foregroundColor(.white)
                             .cornerRadius(15)
                     }
                 }
                 .padding()
                 .blur(radius: isLoading ? 5 : 0)
-                
+
+                // Update the loading spinner to match the design
                 if isLoading {
                     ProgressView() // Loading spinner
-                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         .scaleEffect(2, anchor: .center)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Color.white.opacity(0.8).ignoresSafeArea())
+                        .background(Color.orange.opacity(0.8).ignoresSafeArea())
                 }
             }
         }
