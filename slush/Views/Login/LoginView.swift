@@ -58,21 +58,33 @@ struct LoginView: View {
                     }
                     .padding()
 
-                    // Replace this with your actual sign-in buttons, styled according to your design
-                    // ...
+                    Button(action: {
+                        // Implement your Google Sign-In logic here
+                    }) {
+                        HStack {
+                            Image(systemName: "globe") // Use a Google logo if you have one
+                            Text("Sign in with Google")
+                        }
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.red)
+                        .cornerRadius(10)
+                    }
+                    .padding(.horizontal)
+
+                    // Apple Sign In Button
+                    SignInWithAppleButton(.signIn) { request in
+                        // Handle the Apple Sign-In request
+                    } onCompletion: { result in
+                        // Handle the Apple Sign-In result
+                    }
+                    .signInWithAppleButtonStyle(.black)
+                    .frame(height: 50)
+                    .cornerRadius(10)
+                    .padding(.horizontal)
 
                     Spacer()
-                    
-                    // Update the Sign-up button to match the design
-                    NavigationLink(destination: ProfileSetupView(userViewModel: userViewModel)) {
-                        Text("Sign-up")
-                            .font(.headline)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(Color.orange)
-                            .foregroundColor(.white)
-                            .cornerRadius(15)
-                    }
                 }
                 .padding()
                 .blur(radius: isLoading ? 5 : 0)

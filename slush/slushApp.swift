@@ -69,7 +69,7 @@ struct SlushApp: App {
                         .transition(.opacity)
                 }
             } else {
-                LoginView(userViewModel: userViewModel)
+                WelcomeView(userViewModel: userViewModel)
             }
         }
     }

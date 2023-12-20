@@ -6,16 +6,22 @@
 //
 
 import SwiftUI
+import AuthenticationServices
 
 // MARK: Sign up step 1
+
 struct SignUpStep1View: View {
+    @ObservedObject var userViewModel: UserViewModel
     @Binding var fullname: String
     @Binding var birthdate: Date
     @Binding var email: String
     @Binding var password: String
+    @State private var showLoginView = false
     var onNext: () -> Void
+    var onSignIn: () -> Void // Handler for "Already have an account"
+    var onGoogleSignIn: () -> Void // Handler for "Continue with Google"
+    var onAppleSignIn: () -> Void // Handler for "Continue with Apple"
 
-    // Use your brand's primary color or adjust as needed
     let primaryColor = Color.orange
     let secondaryColor = Color.white
     let inputBackgroundColor = Color(UIColor.systemGray6)
@@ -32,16 +38,11 @@ struct SignUpStep1View: View {
 
             VStack(spacing: 10) {
                 CustomTextField(placeholder: "Full Name", text: $fullname)
-                
                 CustomDatePicker(placeholder: "Birth Date", date: $birthdate)
-                
                 CustomTextField(placeholder: "Email", text: $email, keyboardType: .emailAddress)
-                
                 CustomSecureField(placeholder: "Password", text: $password)
             }
             .padding(.horizontal)
-
-            Spacer() // Use Spacer to push all content to the top
 
             Button(action: onNext) {
                 Text("Next")
@@ -55,6 +56,55 @@ struct SignUpStep1View: View {
             }
             .disabled(fullname.isEmpty || email.isEmpty || password.isEmpty)
             .padding(.horizontal)
+
+            Button(action: {
+                self.showLoginView = true
+            }) {
+                Text("Already have an account?")
+                    .foregroundColor(primaryColor)
+            }
+            .padding()
+
+            // Hidden NavigationLink for programmatic navigation
+            NavigationLink(destination: LoginView(userViewModel: userViewModel), isActive: $showLoginView) {
+                EmptyView()
+            }
+            .hidden()
+
+            // Continue with Google
+            Button(action: onGoogleSignIn) {
+                HStack {
+                    Image(systemName: "globe")
+                    Text("Continue with Google")
+                }
+                .foregroundColor(secondaryColor)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.red)
+                .cornerRadius(inputCornerRadius)
+            }
+            .padding(.horizontal)
+
+            // Continue with Apple
+            SignInWithAppleButton(.signIn) { request in
+                // Configure the request here, e.g., request requestedScopes = [.fullName, .email]
+            } onCompletion: { result in
+                // Handle the authentication result
+                switch result {
+                case .success( _):
+                    // Handle successful authorization
+                    onAppleSignIn()
+                case .failure(let error):
+                    // Handle error
+                    print(error.localizedDescription)
+                }
+            }
+            .signInWithAppleButtonStyle(.black) // or .white, .whiteOutline
+            .frame(height: buttonHeight)
+            .cornerRadius(inputCornerRadius)
+            .padding(.horizontal)
+
+            Spacer() // Pushes everything to the top
         }
         .padding()
         .navigationBarBackButtonHidden(true)
@@ -237,7 +287,23 @@ struct ProfileSetupView: View {
     var body: some View {
             VStack {
                 if currentStep == 1 {
-                    SignUpStep1View(fullname: $fullname, birthdate: $birthdate, email: $email, password: $password, onNext: { currentStep = 2 })
+                    SignUpStep1View(
+                        userViewModel: userViewModel, fullname: $fullname,
+                        birthdate: $birthdate,
+                        email: $email,
+                        password: $password, // Pass the UserViewModel instance here
+                        onNext: { currentStep = 2 },
+                        onSignIn: {
+                            // Action to perform when "Already have an account?" is tapped
+                        },
+                        onGoogleSignIn: {
+                            // Action to perform for Google Sign In
+                        },
+                        onAppleSignIn: {
+                            // Action to perform for Apple Sign In
+                        }
+                    )
+
                 } else if currentStep == 2 {
                     SignUpStep2View(phone: $phone, onNext: { currentStep = 3 })
                 } else if currentStep == 3 {
